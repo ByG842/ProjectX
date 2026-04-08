@@ -1154,6 +1154,7 @@ local Themes = {
 		Hover = Color3.fromRGB(200, 88, 72),
 		HoverChange = 0.04
 	},
+
 }
 
 local Library = {
@@ -1318,6 +1319,7 @@ end
 
 function Spring:step(state, dt)
 
+
 	local d = self._dampingRatio
 	local f = self._frequency * 2 * math.pi
 	local g = self._targetValue
@@ -1338,6 +1340,8 @@ function Spring:step(state, dt)
 		local i = math.cos(f * c * dt)
 		local j = math.sin(f * c * dt)
 
+
+
 		local z
 		if c > EPS then
 			z = j / c
@@ -1345,6 +1349,8 @@ function Spring:step(state, dt)
 			local a = dt * f
 			z = a + ((a * a) * (c * c) * (c * c) / 20 - c * c) * (a * a * a) / 6
 		end
+
+
 
 		local y
 		if f * c > EPS then
@@ -2835,6 +2841,7 @@ Components.Element = (function()
 		Element:SetTitle(Title or "")
 		Element:SetDesc(Desc)
 
+
 		if Library.Window and Library.Window.RegisterElement then
 			Library.Window.RegisterElement(Element.Frame, Title, "Element", Desc)
 		elseif Library.Windows and #Library.Windows > 0 then
@@ -2997,6 +3004,7 @@ Components.Section = (function()
 			CardFrame.Size = UDim2.new(1, 0, 0, totalCardH)
 			Section.Root.Size = UDim2.new(1, 0, 0, totalCardH + GAP_TOP)
 		end)
+
 
 		if Library.Window and Library.Window.RegisterElement then
 			Library.Window.RegisterElement(Section.Root, Title, "Section")
@@ -3976,6 +3984,7 @@ Components.Notification = (function()
 	local Instant = Flipper.Instant.new
 	local New     = Creator.New
 
+	-- ── สีประจำ Type ────────────────────────────────────────────
 	local TypeColors = {
 		info    = Color3.fromRGB(96,  205, 255),  -- ฟ้า
 		success = Color3.fromRGB(80,  220, 120),  -- เขียว
@@ -3984,6 +3993,7 @@ Components.Notification = (function()
 		default = Color3.fromRGB(160, 120, 255),  -- ม่วง (default)
 	}
 
+	-- ── ไอคอน Emoji ประจำ Type ─────────────────────────────────
 	local TypeIcons = {
 		info    = "ℹ️",
 		success = "✅",
@@ -4015,6 +4025,7 @@ Components.Notification = (function()
 	end
 
 	function Notification:New(Config)
+		-- ── ตั้ง default ──────────────────────────────────────
 		Config.Title      = Config.Title      or "Notification"
 		Config.Content    = Config.Content    or ""
 		Config.SubContent = Config.SubContent or ""
@@ -4027,8 +4038,10 @@ Components.Notification = (function()
 
 		local NewNotification = { Closed = false }
 
+		-- ── Acrylic ───────────────────────────────────────────
 		NewNotification.AcrylicPaint = Acrylic.AcrylicPaint()
 
+		-- ── เส้นสีซ้ายบอก Type ───────────────────────────────
 		local TypeBar = New("Frame", {
 			Size             = UDim2.new(0, 3, 1, -16),
 			Position         = UDim2.new(0, 8, 0.5, 0),
@@ -4039,6 +4052,7 @@ Components.Notification = (function()
 			New("UICorner", { CornerRadius = UDim.new(1, 0) }),
 		})
 
+		-- ── ไอคอน Type (emoji) ───────────────────────────────
 		local IconLabel = New("TextLabel", {
 			Text             = iconText,
 			FontFace         = Font.new("rbxasset://fonts/families/GothamSSm.json"),
@@ -4051,6 +4065,7 @@ Components.Notification = (function()
 			RichText         = false,
 		})
 
+		-- ── Title ─────────────────────────────────────────────
 		NewNotification.Title = New("TextLabel", {
 			Position         = UDim2.new(0, 52, 0, 10),
 			Text             = Config.Title,
@@ -4065,6 +4080,7 @@ Components.Notification = (function()
 			TextColor3       = accentColor,
 		})
 
+		-- ── Content ───────────────────────────────────────────
 		NewNotification.ContentLabel = New("TextLabel", {
 			FontFace         = Font.new("rbxasset://fonts/families/GothamSSm.json"),
 			Text             = Config.Content,
@@ -4077,6 +4093,7 @@ Components.Notification = (function()
 			ThemeTag         = { TextColor3 = "Text" },
 		})
 
+		-- ── SubContent ────────────────────────────────────────
 		NewNotification.SubContentLabel = New("TextLabel", {
 			FontFace         = Font.new("rbxasset://fonts/families/GothamSSm.json"),
 			Text             = Config.SubContent,
@@ -4089,6 +4106,7 @@ Components.Notification = (function()
 			ThemeTag         = { TextColor3 = "SubText" },
 		})
 
+		-- ── LabelHolder ───────────────────────────────────────
 		NewNotification.LabelHolder = New("Frame", {
 			AutomaticSize    = Enum.AutomaticSize.Y,
 			BackgroundTransparency = 1,
@@ -4104,6 +4122,7 @@ Components.Notification = (function()
 			NewNotification.SubContentLabel,
 		})
 
+		-- ── ปุ่มปิด X ─────────────────────────────────────────
 		NewNotification.CloseButton = New("TextButton", {
 			Text             = "",
 			Position         = UDim2.new(1, -10, 0, 10),
@@ -4124,6 +4143,7 @@ Components.Notification = (function()
 			}),
 		})
 
+		-- ── Progress bar (Duration timer) ─────────────────────
 		local ProgressTrack = New("Frame", {
 			Size             = UDim2.new(1, -16, 0, 2),
 			Position         = UDim2.new(0, 8, 1, -6),
@@ -4143,6 +4163,7 @@ Components.Notification = (function()
 			New("UICorner", { CornerRadius = UDim.new(1, 0) }),
 		})
 
+		-- ── Root frame ────────────────────────────────────────
 		NewNotification.Root = New("Frame", {
 			BackgroundTransparency = 1,
 			Size             = UDim2.new(1, 0, 1, 0),
@@ -4177,6 +4198,7 @@ Components.Notification = (function()
 		if Config.Content    == "" then NewNotification.ContentLabel.Visible    = false end
 		if Config.SubContent == "" then NewNotification.SubContentLabel.Visible = false end
 
+		-- ── Holder wrapper ────────────────────────────────────
 		NewNotification.Holder = New("Frame", {
 			BackgroundTransparency = 1,
 			Size             = UDim2.new(1, 0, 0, 200),
@@ -4185,6 +4207,7 @@ Components.Notification = (function()
 			NewNotification.Root,
 		})
 
+		-- ── Slide-in motor ────────────────────────────────────
 		local RootMotor = Flipper.GroupMotor.new({ Scale = 1, Offset = 70 })
 		RootMotor:onStep(function(v)
 			NewNotification.Root.Position = UDim2.new(v.Scale, v.Offset, 0, 0)
@@ -4471,6 +4494,8 @@ Components.TitleBar = (function()
 			BackgroundTransparency = 1,
 			Parent = Config.Parent,
 		}, {
+
+			-- ── LEFT SECTION: Logo + stacked Title/SubTitle ──────────────────
 			New("Frame", {
 				Name = "LeftSection",
 				Size = UDim2.new(1, -160, 1, 0),
@@ -4570,6 +4595,7 @@ Components.TitleBar = (function()
 				}),
 			}),
 
+			-- ── RIGHT SECTION: Discord + Min + Max + Close ────────────────────
 			New("Frame", {
 				Name = "RightSection",
 				Size = UDim2.new(0, 154, 1, 0),
@@ -5200,6 +5226,7 @@ Components.Window = (function()
 			CenterWindow()
 		end)
 
+
 		Window.TitleBar = Components.TitleBar({
 			Title = Config.Title,
 			SubTitle = Config.SubTitle,
@@ -5792,6 +5819,7 @@ Components.Window = (function()
 			LastTime = 0
 			Window.SelectorPosMotor:setGoal(Instant(TabModule:GetCurrentTabPos()))
 		end)
+
 
 		return Window
 	end
@@ -8026,6 +8054,11 @@ ElementsTable.Input = (function()
 	return Element
 end)()
 
+-- ============================================================
+-- ✨ 30 NEW ELEMENTS - BataV2.0 ✨
+-- ============================================================
+
+-- [1] MiniBar (ProgressBar ใหม่ — ไม่มี layout bug)
 ElementsTable.MiniBar = (function()
 	local Element = {}
 	Element.__index = Element
@@ -8119,6 +8152,7 @@ ElementsTable.MiniBar = (function()
 	return Element
 end)()
 
+-- [2] Badge (status label)
 ElementsTable.Separator = (function()
 	local Element = {}
 	Element.__index = Element
@@ -8176,6 +8210,9 @@ ElementsTable.Separator = (function()
 	return Element
 end)()
 
+-- [4] Rating (star rating 1-5)
+
+-- [5] Alert (info/warn/error/success banner)
 ElementsTable.Alert = (function()
 	local Element = {}
 	Element.__index = Element
@@ -8256,6 +8293,7 @@ ElementsTable.Alert = (function()
 	return Element
 end)()
 
+-- [6] Checkbox
 ElementsTable.Checkbox = (function()
 	local Element = {}
 	Element.__index = Element
@@ -8339,6 +8377,7 @@ ElementsTable.Checkbox = (function()
 	return Element
 end)()
 
+-- [7] RadioGroup (รองรับ Multi-Select)
 ElementsTable.RadioGroup = (function()
 	local Element = {}
 	Element.__index = Element
@@ -8534,6 +8573,7 @@ ElementsTable.RadioGroup = (function()
 	return Element
 end)()
 
+-- [8] NumberInput (spinbox)
 ElementsTable.NumberInput = (function()
 	local Element = {}
 	Element.__index = Element
@@ -8640,6 +8680,7 @@ ElementsTable.NumberInput = (function()
 	return Element
 end)()
 
+-- [9] CopyButton (button that copies text + shows feedback)
 ElementsTable.CopyButton = (function()
 	local Element = {}
 	Element.__index = Element
@@ -8696,6 +8737,7 @@ ElementsTable.CopyButton = (function()
 	return Element
 end)()
 
+-- [10] ConfirmButton (double-click to confirm)
 ElementsTable.QuickActions = (function()
 	local Element = {}
 	Element.__index = Element
@@ -8770,6 +8812,7 @@ ElementsTable.QuickActions = (function()
 	return Element
 end)()
 
+-- [16] ScrollableList (a scrollable item list inside an element)
 ElementsTable.Timer = (function()
 	local Element = {}
 	Element.__index = Element
@@ -8881,6 +8924,9 @@ ElementsTable.Timer = (function()
 	return Element
 end)()
 
+-- [19] ImagePicker (icon grid selector)
+
+-- [20] Stepper (step/wizard control)
 ElementsTable.ButtonGroup = (function()
 	local Element = {}
 	Element.__index = Element
@@ -8948,6 +8994,7 @@ ElementsTable.ButtonGroup = (function()
 	return Element
 end)()
 
+-- [26] AnimatedLabel (text that types out / changes with animation)
 ElementsTable.Divider = (function()
 	local Element = {}
 	Element.__index = Element
@@ -9017,6 +9064,11 @@ ElementsTable.Divider = (function()
 	return Element
 end)()
 
+-- [28] FavoriteButton (bookmark/star toggle)
+
+-- [29] TextCounter (shows a character/word count as user types)
+
+-- [30] Chip (tag display / filter chip row, read-only or togglable)
 ElementsTable.Chip = (function()
 	local Element = {}
 	Element.__index = Element
@@ -9129,8 +9181,15 @@ ElementsTable.Chip = (function()
 	return Element
 end)()
 
+-- ============================================================
 -- END OF 30 NEW ELEMENTS
+-- ============================================================
 
+-- ============================================================
+-- ✨ 6 NEW ELEMENTS (แทนที่ของเก่า)
+-- ============================================================
+
+-- [NEW-1] SearchBar — input + realtime filter callback
 ElementsTable.StatusIndicator = (function()
 	local Element = {}
 	Element.__index = Element
@@ -9224,6 +9283,7 @@ ElementsTable.StatusIndicator = (function()
 	return Element
 end)()
 
+-- [NEW-3] CounterButton — ปุ่ม +/− พร้อมค่า ใช้กับ quantity/multiplier
 ElementsTable.CounterButton = (function()
 	local Element = {}
 	Element.__index = Element
@@ -9331,6 +9391,7 @@ ElementsTable.CounterButton = (function()
 	return Element
 end)()
 
+-- [NEW-4] ToggleGroup — กลุ่ม toggle เลือกได้แค่ 1 ตัว (สวยกว่า RadioGroup)
 ElementsTable.ToggleGroup = (function()
 	local Element = {}
 	Element.__index = Element
@@ -9436,6 +9497,7 @@ ElementsTable.ToggleGroup = (function()
 	return Element
 end)()
 
+-- ── Accordion (collapsible section ที่ใส่ element ข้างในได้) ──
 ElementsTable.Accordion = (function()
 	local Element = {}
 	Element.__index = Element
@@ -9459,6 +9521,7 @@ ElementsTable.Accordion = (function()
 			Elements = {},
 		}
 
+		-- ── Root frame ────────────────────────────────────────────
 		local Root = New("Frame", {
 			Size             = UDim2.new(1, 0, 0, HEADER_H),
 			BackgroundTransparency = 0.88,
@@ -9476,6 +9539,7 @@ ElementsTable.Accordion = (function()
 			}),
 		})
 
+		-- ── Accent bar ซ้าย ───────────────────────────────────────
 		local AccentBar = New("Frame", {
 			Size             = UDim2.new(0, 3, 1, -(CORNER * 2)),
 			Position         = UDim2.new(0, 0, 0.5, 0),
@@ -9488,6 +9552,7 @@ ElementsTable.Accordion = (function()
 			New("UICorner", { CornerRadius = UDim.new(1, 0) }),
 		})
 
+		-- ── Header (clickable) ────────────────────────────────────
 		local Header = New("TextButton", {
 			Size             = UDim2.new(1, 0, 0, HEADER_H),
 			BackgroundTransparency = 1,
@@ -9540,6 +9605,7 @@ ElementsTable.Accordion = (function()
 			ThemeTag         = { ImageColor3 = Config.Open and "Accent" or "SubText" },
 		})
 
+		-- ── Content area ──────────────────────────────────────────
 		local ContentFrame = New("Frame", {
 			Size             = UDim2.new(1, -16, 0, 0),
 			AutomaticSize    = Enum.AutomaticSize.Y,
@@ -9558,10 +9624,12 @@ ElementsTable.Accordion = (function()
 
 		local contentLayout = ContentFrame:FindFirstChildOfClass("UIListLayout")
 
+		-- ── คำนวณความสูง content ──────────────────────────────────
 		local function getContentHeight()
 			return contentLayout.AbsoluteContentSize.Y + 14
 		end
 
+		-- ── Animation toggle ──────────────────────────────────────
 		local function setOpen(open, instant)
 			Acc.Opened = open
 			local targetH = open and (HEADER_H + getContentHeight()) or HEADER_H
@@ -9615,6 +9683,7 @@ ElementsTable.Accordion = (function()
 			setOpen(not Acc.Opened)
 		end)
 
+		-- ── Public API ────────────────────────────────────────────
 		Acc.Container   = ContentFrame
 		Acc.ScrollFrame = self.ScrollFrame or ContentFrame
 		setmetatable(Acc, Library.Elements)
@@ -10477,995 +10546,194 @@ local Icons = {
 	["lucide-dumbbell"] = "rbxassetid://18273453053"
 }
 
+-- ============================================================
+-- ✨ LiveLabel — real-time status display (replaces Paragraph for live updates)
+-- ✨ Usage: local lbl = section:AddLiveLabel("Status", { Text = "Idle", Icon = "activity" })
+--           lbl:SetText("🟢 Farming Lv 3000-4000")
+--           lbl:SetType("success") -- "info" | "success" | "warning" | "error" | "default"
+-- ============================================================
 ElementsTable.LiveLabel = (function()
 	local Element = {}
 	Element.__index = Element
 	Element.__type  = "LiveLabel"
 	Element.NoIdx   = false
 
-	local TypeColors = {
-		default = Color3.fromRGB(165, 168, 185),
-		info    = Color3.fromRGB(96,  200, 255),
-		success = Color3.fromRGB(80,  215, 130),
-		warning = Color3.fromRGB(255, 195,  60),
-		error   = Color3.fromRGB(255,  80,  80),
-	}
-
-	local TypeBg = {
-		default = Color3.fromRGB(80,  82,  95),
-		info    = Color3.fromRGB(20,  70,  110),
-		success = Color3.fromRGB(15,  75,  45),
-		warning = Color3.fromRGB(90,  65,  10),
-		error   = Color3.fromRGB(90,  20,  20),
+	local TypePalette = {
+		default = { dot = Color3.fromRGB(148, 155, 185), bg = nil },
+		info    = { dot = Color3.fromRGB(96,  200, 255), bg = nil },
+		success = { dot = Color3.fromRGB(80,  215, 130), bg = nil },
+		warning = { dot = Color3.fromRGB(255, 195,  60), bg = nil },
+		error   = { dot = Color3.fromRGB(255,  80,  80), bg = nil },
 	}
 
 	function Element:New(Idx, Config)
-		Config      = Config or {}
-		Config.Text = Config.Text or ""
-		Config.Type = Config.Type or "default"
+		Config        = Config or {}
+		Config.Text   = Config.Text   or ""
+		Config.Type   = Config.Type   or "default"
+		Config.Icon   = Config.Icon   -- lucide icon name (optional)
 
 		local New = Creator.New
-
-		local LL = {
-			Value = Config.Text,
-			Type  = "LiveLabel",
-			_type = Config.Type,
+		local LL  = {
+			Value    = Config.Text,
+			Type     = "LiveLabel",
+			_type    = Config.Type,
 		}
 
+		-- ── outer element row (title + right-side live area) ──────
 		local LLFrame = Components.Element(Config.Title or "", Config.Description, self.Container, false, Config)
 		LL.SetTitle = LLFrame.SetTitle
 		LL.SetDesc  = LLFrame.SetDesc
 		LL.Visible  = LLFrame.Visible
 		LL.Elements = LLFrame
 
-		-- ── Pill วางชิดขวา AutomaticSize X ──────────────────────
-		-- ความกว้าง max ครึ่งหนึ่งของ frame เพื่อไม่ทับ title
-		local Pill = New("Frame", {
-			AutomaticSize          = Enum.AutomaticSize.XY,
-			AnchorPoint            = Vector2.new(1, 0.5),
-			Position               = UDim2.new(1, -10, 0.5, 0),
-			BackgroundTransparency = 0.72,
-			BackgroundColor3       = TypeBg[Config.Type] or TypeBg.default,
-			Parent                 = LLFrame.Frame,
+		-- ── right-side live pill ──────────────────────────────────
+		local palette = TypePalette[Config.Type] or TypePalette.default
+
+		-- pulse dot
+		local PulseDot = New("Frame", {
+			Size             = UDim2.fromOffset(7, 7),
+			BackgroundColor3 = palette.dot,
+			AnchorPoint      = Vector2.new(0, 0.5),
+			LayoutOrder      = 1,
 		}, {
-			New("UICorner", { CornerRadius = UDim.new(0, 6) }),
-			New("UIStroke", {
-				Transparency    = 0.55,
-				Thickness       = 1,
-				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-				Color           = TypeColors[Config.Type] or TypeColors.default,
-			}),
-			New("UIPadding", {
-				PaddingLeft   = UDim.new(0, 7),
-				PaddingRight  = UDim.new(0, 7),
-				PaddingTop    = UDim.new(0, 4),
-				PaddingBottom = UDim.new(0, 4),
-			}),
-			-- จำกัดความกว้างสูงสุดไม่ให้ทับ title
-			New("UISizeConstraint", {
-				MaxSize = Vector2.new(200, math.huge),
-			}),
+			New("UICorner",  { CornerRadius = UDim.new(1, 0) }),
+			New("UIAspectRatioConstraint", { AspectRatio = 1 }),
 		})
 
-		-- ── Text ข้างใน Pill ─────────────────────────────────────
-		local ValueLabel = New("TextLabel", {
-			FontFace               = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium),
-			Text                   = Config.Text,
-			TextColor3             = TypeColors[Config.Type] or TypeColors.default,
-			TextSize               = 12,
-			TextXAlignment         = Enum.TextXAlignment.Right,
-			TextYAlignment         = Enum.TextYAlignment.Center,
-			TextWrapped            = true,
-			RichText               = true,
-			AutomaticSize          = Enum.AutomaticSize.Y,
+		-- text label
+		local LiveText = New("TextLabel", {
+			Text             = Config.Text,
+			FontFace         = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium),
+			TextSize         = 12,
 			BackgroundTransparency = 1,
-			-- กว้างเต็ม Pill (padding จัดการระยะห่างแล้ว)
-			Size                   = UDim2.new(1, 0, 0, 0),
-			Parent                 = Pill,
+			AutomaticSize    = Enum.AutomaticSize.X,
+			Size             = UDim2.fromOffset(0, 16),
+			TextXAlignment   = Enum.TextXAlignment.Left,
+			RichText         = true,
+			LayoutOrder      = 2,
+			ThemeTag         = { TextColor3 = "Text" },
 		})
 
-		-- ซ่อน Pill ตอนที่ text ว่าง
-		Pill.Visible = Config.Text ~= ""
-
-		-- ── ให้ frame หลักขยายตาม Pill เมื่อ text หลายบรรทัด ───
-		-- ใช้ AbsoluteSize ของ Pill drive ความสูง frame
-		local BASE_H = 44  -- ความสูงปกติของ element row (px)
-		local MIN_H  = BASE_H
-
-		local function syncFrameHeight()
-			local pillH  = Pill.AbsoluteSize.Y
-			local target = math.max(MIN_H, pillH + 16)
-			if math.abs(LLFrame.Frame.Size.Y.Offset - target) > 1 then
-				TweenService:Create(
-					LLFrame.Frame,
-					TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-					{ Size = UDim2.new(1, 0, 0, target) }
-				):Play()
-				-- จัด Pill ให้อยู่กึ่งกลาง Y ตามความสูงใหม่
-				Pill.Position = UDim2.new(1, -10, 0.5, 0)
+		-- optional lucide icon
+		local IconImg
+		if Config.Icon then
+			local iconId = Library:GetIcon(Config.Icon)
+			if iconId then
+				IconImg = New("ImageLabel", {
+					Image            = iconId,
+					Size             = UDim2.fromOffset(14, 14),
+					BackgroundTransparency = 1,
+					LayoutOrder      = 0,
+					ThemeTag         = { ImageColor3 = "SubText" },
+				})
 			end
 		end
 
-		Creator.AddSignal(Pill:GetPropertyChangedSignal("AbsoluteSize"), syncFrameHeight)
+		-- pill container
+		local PillHolder = New("Frame", {
+			Size             = UDim2.fromOffset(0, 24),
+			AutomaticSize    = Enum.AutomaticSize.X,
+			AnchorPoint      = Vector2.new(1, 0.5),
+			Position         = UDim2.new(1, -10, 0.5, 0),
+			BackgroundTransparency = 0.88,
+			Parent           = LLFrame.Frame,
+			ThemeTag         = { BackgroundColor3 = "Element" },
+		}, {
+			New("UICorner",  { CornerRadius = UDim.new(1, 0) }),
+			New("UIStroke",  {
+				Transparency    = 0.55,
+				Thickness       = 1,
+				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+				ThemeTag        = { Color = "InElementBorder" },
+			}),
+			New("UIListLayout", {
+				FillDirection     = Enum.FillDirection.Horizontal,
+				VerticalAlignment = Enum.VerticalAlignment.Center,
+				Padding           = UDim.new(0, 5),
+				SortOrder         = Enum.SortOrder.LayoutOrder,
+			}),
+			New("UIPadding", {
+				PaddingLeft  = UDim.new(0, 8),
+				PaddingRight = UDim.new(0, 10),
+			}),
+			IconImg,
+			PulseDot,
+			LiveText,
+		})
 
-		-- ── API ──────────────────────────────────────────────────
-		local PillStroke = Pill:FindFirstChildOfClass("UIStroke")
+		-- ── pulse animation loop ──────────────────────────────────
+		local pulseConn
+		local function startPulse(dotColor)
+			if pulseConn then pulseConn:Disconnect() pulseConn = nil end
+			local pulsing = true
+			task.spawn(function()
+				while pulsing and PulseDot and PulseDot.Parent do
+					TweenService:Create(PulseDot, TweenInfo.new(0.55, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+						BackgroundTransparency = 0.35,
+						Size = UDim2.fromOffset(9, 9),
+					}):Play()
+					task.wait(0.55)
+					if not (pulsing and PulseDot and PulseDot.Parent) then break end
+					TweenService:Create(PulseDot, TweenInfo.new(0.55, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+						BackgroundTransparency = 0,
+						Size = UDim2.fromOffset(7, 7),
+					}):Play()
+					task.wait(0.55)
+				end
+			end)
+			pulseConn = { Disconnect = function() pulsing = false end }
+		end
 
+		local function stopPulse()
+			if pulseConn then pulseConn:Disconnect() pulseConn = nil end
+			if PulseDot and PulseDot.Parent then
+				PulseDot.BackgroundTransparency = 0
+				PulseDot.Size = UDim2.fromOffset(7, 7)
+			end
+		end
+
+		-- ── Public API ────────────────────────────────────────────
 		function LL:SetText(text)
-			self.Value      = text or ""
-			ValueLabel.Text = self.Value
-			Pill.Visible    = self.Value ~= ""
-			Library:SafeCallback(LL.Changed, self.Value)
+			self.Value = text or ""
+			LiveText.Text = self.Value
 		end
 
 		function LL:SetType(t)
 			self._type = t or "default"
-			local col  = TypeColors[self._type] or TypeColors.default
-			local bg   = TypeBg[self._type]     or TypeBg.default
-			local ti   = TweenInfo.new(0.15)
-			TweenService:Create(ValueLabel, ti, { TextColor3 = col }):Play()
-			TweenService:Create(Pill,       ti, { BackgroundColor3 = bg }):Play()
-			if PillStroke then
-				TweenService:Create(PillStroke, ti, { Color = col }):Play()
+			local p = TypePalette[self._type] or TypePalette.default
+			TweenService:Create(PulseDot, TweenInfo.new(0.2), { BackgroundColor3 = p.dot }):Play()
+			-- pulse ถ้าเป็น running state
+			if self._type == "success" or self._type == "info" then
+				startPulse(p.dot)
+			else
+				stopPulse()
 			end
 		end
 
-		function LL:SetColor(color)
-			ValueLabel.TextColor3 = color
-			if PillStroke then PillStroke.Color = color end
+		function LL:SetIcon(iconName)
+			if IconImg then
+				local id = Library:GetIcon(iconName)
+				if id then IconImg.Image = id end
+			end
 		end
 
 		function LL:OnChanged(Func) LL.Changed = Func Func(LL.Value) end
 
 		function LL:Destroy()
+			stopPulse()
 			LLFrame.Frame:Destroy()
 			if Idx then Library.Options[Idx] = nil end
 		end
 
+		-- init state
 		LL:SetType(Config.Type)
+
 		if Idx then Library.Options[Idx] = LL end
 		return LL
 	end
 
 	return Element
 end)()
-
-local NotificationModule = Components.Notification
-NotificationModule:Init(GUI)
-
-local New = Creator.New
-
-local Icons = {
-	["lucide-accessibility"] = "rbxassetid://10709751939",
-	["lucide-activity"] = "rbxassetid://10709752035",
-	["lucide-air-vent"] = "rbxassetid://10709752131",
-	["lucide-airplay"] = "rbxassetid://10709752254",
-	["lucide-alarm-check"] = "rbxassetid://10709752405",
-	["lucide-alarm-clock"] = "rbxassetid://10709752630",
-	["lucide-alarm-clock-off"] = "rbxassetid://10709752508",
-	["lucide-alarm-minus"] = "rbxassetid://10709752732",
-	["lucide-alarm-plus"] = "rbxassetid://10709752825",
-	["lucide-album"] = "rbxassetid://10709752906",
-	["lucide-alert-circle"] = "rbxassetid://10709752996",
-	["lucide-alert-octagon"] = "rbxassetid://10709753064",
-	["lucide-alert-triangle"] = "rbxassetid://10709753149",
-	["lucide-align-center"] = "rbxassetid://10709753570",
-	["lucide-align-center-horizontal"] = "rbxassetid://10709753272",
-	["lucide-align-center-vertical"] = "rbxassetid://10709753421",
-	["lucide-align-end-horizontal"] = "rbxassetid://10709753692",
-	["lucide-align-end-vertical"] = "rbxassetid://10709753808",
-	["lucide-align-horizontal-distribute-center"] = "rbxassetid://10747779791",
-	["lucide-align-horizontal-distribute-end"] = "rbxassetid://10747784534",
-	["lucide-align-horizontal-distribute-start"] = "rbxassetid://10709754118",
-	["lucide-align-horizontal-justify-center"] = "rbxassetid://10709754204",
-	["lucide-align-horizontal-justify-end"] = "rbxassetid://10709754317",
-	["lucide-align-horizontal-justify-start"] = "rbxassetid://10709754436",
-	["lucide-align-horizontal-space-around"] = "rbxassetid://10709754590",
-	["lucide-align-horizontal-space-between"] = "rbxassetid://10709754749",
-	["lucide-align-justify"] = "rbxassetid://10709759610",
-	["lucide-align-left"] = "rbxassetid://10709759764",
-	["lucide-align-right"] = "rbxassetid://10709759895",
-	["lucide-align-start-horizontal"] = "rbxassetid://10709760051",
-	["lucide-align-start-vertical"] = "rbxassetid://10709760244",
-	["lucide-align-vertical-distribute-center"] = "rbxassetid://10709760351",
-	["lucide-align-vertical-distribute-end"] = "rbxassetid://10709760434",
-	["lucide-align-vertical-distribute-start"] = "rbxassetid://10709760612",
-	["lucide-align-vertical-justify-center"] = "rbxassetid://10709760814",
-	["lucide-align-vertical-justify-end"] = "rbxassetid://10709761003",
-	["lucide-align-vertical-justify-start"] = "rbxassetid://10709761176",
-	["lucide-align-vertical-space-around"] = "rbxassetid://10709761324",
-	["lucide-align-vertical-space-between"] = "rbxassetid://10709761434",
-	["lucide-anchor"] = "rbxassetid://10709761530",
-	["lucide-angry"] = "rbxassetid://10709761629",
-	["lucide-annoyed"] = "rbxassetid://10709761722",
-	["lucide-aperture"] = "rbxassetid://10709761813",
-	["lucide-apple"] = "rbxassetid://10709761889",
-	["lucide-archive"] = "rbxassetid://10709762233",
-	["lucide-archive-restore"] = "rbxassetid://10709762058",
-	["lucide-armchair"] = "rbxassetid://10709762327",
-	["lucide-anvil"] = "rbxassetid://77943964625400",
-	["lucide-arrow-big-down"] = "rbxassetid://10747796644",
-	["lucide-arrow-big-left"] = "rbxassetid://10709762574",
-	["lucide-arrow-big-right"] = "rbxassetid://10709762727",
-	["lucide-arrow-big-up"] = "rbxassetid://10709762879",
-	["lucide-arrow-down"] = "rbxassetid://10709767827",
-	["lucide-arrow-down-circle"] = "rbxassetid://10709763034",
-	["lucide-arrow-down-left"] = "rbxassetid://10709767656",
-	["lucide-arrow-down-right"] = "rbxassetid://10709767750",
-	["lucide-arrow-left"] = "rbxassetid://10709768114",
-	["lucide-arrow-left-circle"] = "rbxassetid://10709767936",
-	["lucide-arrow-left-right"] = "rbxassetid://10709768019",
-	["lucide-arrow-right"] = "rbxassetid://10709768347",
-	["lucide-arrow-right-circle"] = "rbxassetid://10709768226",
-	["lucide-arrow-up"] = "rbxassetid://10709768939",
-	["lucide-arrow-up-circle"] = "rbxassetid://10709768432",
-	["lucide-arrow-up-down"] = "rbxassetid://10709768538",
-	["lucide-arrow-up-left"] = "rbxassetid://10709768661",
-	["lucide-arrow-up-right"] = "rbxassetid://10709768787",
-	["lucide-asterisk"] = "rbxassetid://10709769095",
-	["lucide-at-sign"] = "rbxassetid://10709769286",
-	["lucide-award"] = "rbxassetid://10709769406",
-	["lucide-axe"] = "rbxassetid://10709769508",
-	["lucide-axis-3d"] = "rbxassetid://10709769598",
-	["lucide-baby"] = "rbxassetid://10709769732",
-	["lucide-backpack"] = "rbxassetid://10709769841",
-	["lucide-baggage-claim"] = "rbxassetid://10709769935",
-	["lucide-banana"] = "rbxassetid://10709770005",
-	["lucide-banknote"] = "rbxassetid://10709770178",
-	["lucide-bar-chart"] = "rbxassetid://10709773755",
-	["lucide-bar-chart-2"] = "rbxassetid://10709770317",
-	["lucide-bar-chart-3"] = "rbxassetid://10709770431",
-	["lucide-bar-chart-4"] = "rbxassetid://10709770560",
-	["lucide-bar-chart-horizontal"] = "rbxassetid://10709773669",
-	["lucide-barcode"] = "rbxassetid://10747360675",
-	["lucide-baseline"] = "rbxassetid://10709773863",
-	["lucide-bath"] = "rbxassetid://10709773963",
-	["lucide-battery"] = "rbxassetid://10709774640",
-	["lucide-battery-charging"] = "rbxassetid://10709774068",
-	["lucide-battery-full"] = "rbxassetid://10709774206",
-	["lucide-battery-low"] = "rbxassetid://10709774370",
-	["lucide-battery-medium"] = "rbxassetid://10709774513",
-	["lucide-beaker"] = "rbxassetid://10709774756",
-	["lucide-bed"] = "rbxassetid://10709775036",
-	["lucide-bed-double"] = "rbxassetid://10709774864",
-	["lucide-bed-single"] = "rbxassetid://10709774968",
-	["lucide-beer"] = "rbxassetid://10709775167",
-	["lucide-bell"] = "rbxassetid://10709775704",
-	["lucide-bell-minus"] = "rbxassetid://10709775241",
-	["lucide-bell-off"] = "rbxassetid://10709775320",
-	["lucide-bell-plus"] = "rbxassetid://10709775448",
-	["lucide-bell-ring"] = "rbxassetid://10709775560",
-	["lucide-bike"] = "rbxassetid://10709775894",
-	["lucide-binary"] = "rbxassetid://10709776050",
-	["lucide-bitcoin"] = "rbxassetid://10709776126",
-	["lucide-bluetooth"] = "rbxassetid://10709776655",
-	["lucide-bluetooth-connected"] = "rbxassetid://10709776240",
-	["lucide-bluetooth-off"] = "rbxassetid://10709776344",
-	["lucide-bluetooth-searching"] = "rbxassetid://10709776501",
-	["lucide-bold"] = "rbxassetid://10747813908",
-	["lucide-bomb"] = "rbxassetid://10709781460",
-	["lucide-bone"] = "rbxassetid://10709781605",
-	["lucide-book"] = "rbxassetid://10709781824",
-	["lucide-book-open"] = "rbxassetid://10709781717",
-	["lucide-bookmark"] = "rbxassetid://10709782154",
-	["lucide-bookmark-minus"] = "rbxassetid://10709781919",
-	["lucide-bookmark-plus"] = "rbxassetid://10709782044",
-	["lucide-bot"] = "rbxassetid://10709782230",
-	["lucide-box"] = "rbxassetid://10709782497",
-	["lucide-box-select"] = "rbxassetid://10709782342",
-	["lucide-boxes"] = "rbxassetid://10709782582",
-	["lucide-briefcase"] = "rbxassetid://10709782662",
-	["lucide-brush"] = "rbxassetid://10709782758",
-	["lucide-bug"] = "rbxassetid://10709782845",
-	["lucide-building"] = "rbxassetid://10709783051",
-	["lucide-building-2"] = "rbxassetid://10709782939",
-	["lucide-bus"] = "rbxassetid://10709783137",
-	["lucide-cake"] = "rbxassetid://10709783217",
-	["lucide-calculator"] = "rbxassetid://10709783311",
-	["lucide-calendar"] = "rbxassetid://10709789505",
-	["lucide-calendar-check"] = "rbxassetid://10709783474",
-	["lucide-calendar-check-2"] = "rbxassetid://10709783392",
-	["lucide-calendar-clock"] = "rbxassetid://10709783577",
-	["lucide-calendar-days"] = "rbxassetid://10709783673",
-	["lucide-calendar-heart"] = "rbxassetid://10709783835",
-	["lucide-calendar-minus"] = "rbxassetid://10709783959",
-	["lucide-calendar-off"] = "rbxassetid://10709788784",
-	["lucide-calendar-plus"] = "rbxassetid://10709788937",
-	["lucide-calendar-range"] = "rbxassetid://10709789053",
-	["lucide-calendar-search"] = "rbxassetid://10709789200",
-	["lucide-calendar-x"] = "rbxassetid://10709789407",
-	["lucide-calendar-x-2"] = "rbxassetid://10709789329",
-	["lucide-camera"] = "rbxassetid://10709789686",
-	["lucide-camera-off"] = "rbxassetid://10747822677",
-	["lucide-car"] = "rbxassetid://10709789810",
-	["lucide-carrot"] = "rbxassetid://10709789960",
-	["lucide-cast"] = "rbxassetid://10709790097",
-	["lucide-charge"] = "rbxassetid://10709790202",
-	["lucide-check"] = "rbxassetid://10709790644",
-	["lucide-check-circle"] = "rbxassetid://10709790387",
-	["lucide-check-circle-2"] = "rbxassetid://10709790298",
-	["lucide-check-square"] = "rbxassetid://10709790537",
-	["lucide-chef-hat"] = "rbxassetid://10709790757",
-	["lucide-cherry"] = "rbxassetid://10709790875",
-	["lucide-chevron-down"] = "rbxassetid://10709790948",
-	["lucide-chevron-first"] = "rbxassetid://10709791015",
-	["lucide-chevron-last"] = "rbxassetid://10709791130",
-	["lucide-chevron-left"] = "rbxassetid://10709791281",
-	["lucide-chevron-right"] = "rbxassetid://10709791437",
-	["lucide-chevron-up"] = "rbxassetid://10709791523",
-	["lucide-chevrons-down"] = "rbxassetid://10709796864",
-	["lucide-chevrons-down-up"] = "rbxassetid://10709791632",
-	["lucide-chevrons-left"] = "rbxassetid://10709797151",
-	["lucide-chevrons-left-right"] = "rbxassetid://10709797006",
-	["lucide-chevrons-right"] = "rbxassetid://10709797382",
-	["lucide-chevrons-right-left"] = "rbxassetid://10709797274",
-	["lucide-chevrons-up"] = "rbxassetid://10709797622",
-	["lucide-chevrons-up-down"] = "rbxassetid://10709797508",
-	["lucide-chrome"] = "rbxassetid://10709797725",
-	["lucide-circle"] = "rbxassetid://10709798174",
-	["lucide-circle-dot"] = "rbxassetid://10709797837",
-	["lucide-circle-ellipsis"] = "rbxassetid://10709797985",
-	["lucide-circle-slashed"] = "rbxassetid://10709798100",
-	["lucide-citrus"] = "rbxassetid://10709798276",
-	["lucide-clapperboard"] = "rbxassetid://10709798350",
-	["lucide-clipboard"] = "rbxassetid://10709799288",
-	["lucide-clipboard-check"] = "rbxassetid://10709798443",
-	["lucide-clipboard-copy"] = "rbxassetid://10709798574",
-	["lucide-clipboard-edit"] = "rbxassetid://10709798682",
-	["lucide-clipboard-list"] = "rbxassetid://10709798792",
-	["lucide-clipboard-signature"] = "rbxassetid://10709798890",
-	["lucide-clipboard-type"] = "rbxassetid://10709798999",
-	["lucide-clipboard-x"] = "rbxassetid://10709799124",
-	["lucide-clock"] = "rbxassetid://10709805144",
-	["lucide-clock-1"] = "rbxassetid://10709799535",
-	["lucide-clock-10"] = "rbxassetid://10709799718",
-	["lucide-clock-11"] = "rbxassetid://10709799818",
-	["lucide-clock-12"] = "rbxassetid://10709799962",
-	["lucide-clock-2"] = "rbxassetid://10709803876",
-	["lucide-clock-3"] = "rbxassetid://10709803989",
-	["lucide-clock-4"] = "rbxassetid://10709804164",
-	["lucide-clock-5"] = "rbxassetid://10709804291",
-	["lucide-clock-6"] = "rbxassetid://10709804435",
-	["lucide-clock-7"] = "rbxassetid://10709804599",
-	["lucide-clock-8"] = "rbxassetid://10709804784",
-	["lucide-clock-9"] = "rbxassetid://10709804996",
-	["lucide-cloud"] = "rbxassetid://10709806740",
-	["lucide-cloud-cog"] = "rbxassetid://10709805262",
-	["lucide-cloud-drizzle"] = "rbxassetid://10709805371",
-	["lucide-cloud-fog"] = "rbxassetid://10709805477",
-	["lucide-cloud-hail"] = "rbxassetid://10709805596",
-	["lucide-cloud-lightning"] = "rbxassetid://10709805727",
-	["lucide-cloud-moon"] = "rbxassetid://10709805942",
-	["lucide-cloud-moon-rain"] = "rbxassetid://10709805838",
-	["lucide-cloud-off"] = "rbxassetid://10709806060",
-	["lucide-cloud-rain"] = "rbxassetid://10709806277",
-	["lucide-cloud-rain-wind"] = "rbxassetid://10709806166",
-	["lucide-cloud-snow"] = "rbxassetid://10709806374",
-	["lucide-cloud-sun"] = "rbxassetid://10709806631",
-	["lucide-cloud-sun-rain"] = "rbxassetid://10709806475",
-	["lucide-cloudy"] = "rbxassetid://10709806859",
-	["lucide-clover"] = "rbxassetid://10709806995",
-	["lucide-code"] = "rbxassetid://10709810463",
-	["lucide-code-2"] = "rbxassetid://10709807111",
-	["lucide-codepen"] = "rbxassetid://10709810534",
-	["lucide-codesandbox"] = "rbxassetid://10709810676",
-	["lucide-coffee"] = "rbxassetid://10709810814",
-	["lucide-cog"] = "rbxassetid://10709810948",
-	["lucide-coins"] = "rbxassetid://10709811110",
-	["lucide-columns"] = "rbxassetid://10709811261",
-	["lucide-command"] = "rbxassetid://10709811365",
-	["lucide-compass"] = "rbxassetid://10709811445",
-	["lucide-component"] = "rbxassetid://10709811595",
-	["lucide-concierge-bell"] = "rbxassetid://10709811706",
-	["lucide-connection"] = "rbxassetid://10747361219",
-	["lucide-contact"] = "rbxassetid://10709811834",
-	["lucide-contrast"] = "rbxassetid://10709811939",
-	["lucide-cookie"] = "rbxassetid://10709812067",
-	["lucide-copy"] = "rbxassetid://10709812159",
-	["lucide-copyleft"] = "rbxassetid://10709812251",
-	["lucide-copyright"] = "rbxassetid://10709812311",
-	["lucide-corner-down-left"] = "rbxassetid://10709812396",
-	["lucide-corner-down-right"] = "rbxassetid://10709812485",
-	["lucide-corner-left-down"] = "rbxassetid://10709812632",
-	["lucide-corner-left-up"] = "rbxassetid://10709812784",
-	["lucide-corner-right-down"] = "rbxassetid://10709812939",
-	["lucide-corner-right-up"] = "rbxassetid://10709813094",
-	["lucide-corner-up-left"] = "rbxassetid://10709813185",
-	["lucide-corner-up-right"] = "rbxassetid://10709813281",
-	["lucide-cpu"] = "rbxassetid://10709813383",
-	["lucide-croissant"] = "rbxassetid://10709818125",
-	["lucide-crop"] = "rbxassetid://10709818245",
-	["lucide-cross"] = "rbxassetid://10709818399",
-	["lucide-crosshair"] = "rbxassetid://10709818534",
-	["lucide-crown"] = "rbxassetid://10709818626",
-	["lucide-cup-soda"] = "rbxassetid://10709818763",
-	["lucide-curly-braces"] = "rbxassetid://10709818847",
-	["lucide-currency"] = "rbxassetid://10709818931",
-	["lucide-container"] = "rbxassetid://17466205552",
-	["lucide-database"] = "rbxassetid://10709818996",
-	["lucide-delete"] = "rbxassetid://10709819059",
-	["lucide-diamond"] = "rbxassetid://10709819149",
-	["lucide-dice-1"] = "rbxassetid://10709819266",
-	["lucide-dice-2"] = "rbxassetid://10709819361",
-	["lucide-dice-3"] = "rbxassetid://10709819508",
-	["lucide-dice-4"] = "rbxassetid://10709819670",
-	["lucide-dice-5"] = "rbxassetid://10709819801",
-	["lucide-dice-6"] = "rbxassetid://10709819896",
-	["lucide-dices"] = "rbxassetid://10723343321",
-	["lucide-diff"] = "rbxassetid://10723343416",
-	["lucide-disc"] = "rbxassetid://10723343537",
-	["lucide-divide"] = "rbxassetid://10723343805",
-	["lucide-divide-circle"] = "rbxassetid://10723343636",
-	["lucide-divide-square"] = "rbxassetid://10723343737",
-	["lucide-dollar-sign"] = "rbxassetid://10723343958",
-	["lucide-download"] = "rbxassetid://10723344270",
-	["lucide-download-cloud"] = "rbxassetid://10723344088",
-	["lucide-door-open"] = "rbxassetid://124179241653522",
-	["lucide-droplet"] = "rbxassetid://10723344432",
-	["lucide-droplets"] = "rbxassetid://10734883356",
-	["lucide-drumstick"] = "rbxassetid://10723344737",
-	["lucide-edit"] = "rbxassetid://10734883598",
-	["lucide-edit-2"] = "rbxassetid://10723344885",
-	["lucide-edit-3"] = "rbxassetid://10723345088",
-	["lucide-egg"] = "rbxassetid://10723345518",
-	["lucide-egg-fried"] = "rbxassetid://10723345347",
-	["lucide-electricity"] = "rbxassetid://10723345749",
-	["lucide-electricity-off"] = "rbxassetid://10723345643",
-	["lucide-equal"] = "rbxassetid://10723345990",
-	["lucide-equal-not"] = "rbxassetid://10723345866",
-	["lucide-eraser"] = "rbxassetid://10723346158",
-	["lucide-euro"] = "rbxassetid://10723346372",
-	["lucide-expand"] = "rbxassetid://10723346553",
-	["lucide-external-link"] = "rbxassetid://10723346684",
-	["lucide-eye"] = "rbxassetid://10723346959",
-	["lucide-eye-off"] = "rbxassetid://10723346871",
-	["lucide-factory"] = "rbxassetid://10723347051",
-	["lucide-fan"] = "rbxassetid://10723354359",
-	["lucide-fast-forward"] = "rbxassetid://10723354521",
-	["lucide-feather"] = "rbxassetid://10723354671",
-	["lucide-figma"] = "rbxassetid://10723354801",
-	["lucide-file"] = "rbxassetid://10723374641",
-	["lucide-file-archive"] = "rbxassetid://10723354921",
-	["lucide-file-audio"] = "rbxassetid://10723355148",
-	["lucide-file-audio-2"] = "rbxassetid://10723355026",
-	["lucide-file-axis-3d"] = "rbxassetid://10723355272",
-	["lucide-file-badge"] = "rbxassetid://10723355622",
-	["lucide-file-badge-2"] = "rbxassetid://10723355451",
-	["lucide-file-bar-chart"] = "rbxassetid://10723355887",
-	["lucide-file-bar-chart-2"] = "rbxassetid://10723355746",
-	["lucide-file-box"] = "rbxassetid://10723355989",
-	["lucide-file-check"] = "rbxassetid://10723356210",
-	["lucide-file-check-2"] = "rbxassetid://10723356100",
-	["lucide-file-clock"] = "rbxassetid://10723356329",
-	["lucide-file-code"] = "rbxassetid://10723356507",
-	["lucide-file-cog"] = "rbxassetid://10723356830",
-	["lucide-file-cog-2"] = "rbxassetid://10723356676",
-	["lucide-file-diff"] = "rbxassetid://10723357039",
-	["lucide-file-digit"] = "rbxassetid://10723357151",
-	["lucide-file-down"] = "rbxassetid://10723357322",
-	["lucide-file-edit"] = "rbxassetid://10723357495",
-	["lucide-file-heart"] = "rbxassetid://10723357637",
-	["lucide-file-image"] = "rbxassetid://10723357790",
-	["lucide-file-input"] = "rbxassetid://10723357933",
-	["lucide-file-json"] = "rbxassetid://10723364435",
-	["lucide-file-json-2"] = "rbxassetid://10723364361",
-	["lucide-file-key"] = "rbxassetid://10723364605",
-	["lucide-file-key-2"] = "rbxassetid://10723364515",
-	["lucide-file-line-chart"] = "rbxassetid://10723364725",
-	["lucide-file-lock"] = "rbxassetid://10723364957",
-	["lucide-file-lock-2"] = "rbxassetid://10723364861",
-	["lucide-file-minus"] = "rbxassetid://10723365254",
-	["lucide-file-minus-2"] = "rbxassetid://10723365086",
-	["lucide-file-output"] = "rbxassetid://10723365457",
-	["lucide-file-pie-chart"] = "rbxassetid://10723365598",
-	["lucide-file-plus"] = "rbxassetid://10723365877",
-	["lucide-file-plus-2"] = "rbxassetid://10723365766",
-	["lucide-file-question"] = "rbxassetid://10723365987",
-	["lucide-file-scan"] = "rbxassetid://10723366167",
-	["lucide-file-search"] = "rbxassetid://10723366550",
-	["lucide-file-search-2"] = "rbxassetid://10723366340",
-	["lucide-file-signature"] = "rbxassetid://10723366741",
-	["lucide-file-spreadsheet"] = "rbxassetid://10723366962",
-	["lucide-file-symlink"] = "rbxassetid://10723367098",
-	["lucide-file-terminal"] = "rbxassetid://10723367244",
-	["lucide-file-text"] = "rbxassetid://10723367380",
-	["lucide-file-type"] = "rbxassetid://10723367606",
-	["lucide-file-type-2"] = "rbxassetid://10723367509",
-	["lucide-file-up"] = "rbxassetid://10723367734",
-	["lucide-file-video"] = "rbxassetid://10723373884",
-	["lucide-file-video-2"] = "rbxassetid://10723367834",
-	["lucide-file-volume"] = "rbxassetid://10723374172",
-	["lucide-file-volume-2"] = "rbxassetid://10723374030",
-	["lucide-file-warning"] = "rbxassetid://10723374276",
-	["lucide-file-x"] = "rbxassetid://10723374544",
-	["lucide-file-x-2"] = "rbxassetid://10723374378",
-	["lucide-files"] = "rbxassetid://10723374759",
-	["lucide-film"] = "rbxassetid://10723374981",
-	["lucide-filter"] = "rbxassetid://10723375128",
-	["lucide-fingerprint"] = "rbxassetid://10723375250",
-	["lucide-flag"] = "rbxassetid://10723375890",
-	["lucide-flag-off"] = "rbxassetid://10723375443",
-	["lucide-flag-triangle-left"] = "rbxassetid://10723375608",
-	["lucide-flag-triangle-right"] = "rbxassetid://10723375727",
-	["lucide-flame"] = "rbxassetid://10723376114",
-	["lucide-flashlight"] = "rbxassetid://10723376471",
-	["lucide-flashlight-off"] = "rbxassetid://10723376365",
-	["lucide-flask-conical"] = "rbxassetid://10734883986",
-	["lucide-flask-round"] = "rbxassetid://10723376614",
-	["lucide-flip-horizontal"] = "rbxassetid://10723376884",
-	["lucide-flip-horizontal-2"] = "rbxassetid://10723376745",
-	["lucide-flip-vertical"] = "rbxassetid://10723377138",
-	["lucide-flip-vertical-2"] = "rbxassetid://10723377026",
-	["lucide-flower"] = "rbxassetid://10747830374",
-	["lucide-flower-2"] = "rbxassetid://10723377305",
-	["lucide-focus"] = "rbxassetid://10723377537",
-	["lucide-folder"] = "rbxassetid://10723387563",
-	["lucide-folder-archive"] = "rbxassetid://10723384478",
-	["lucide-folder-check"] = "rbxassetid://10723384605",
-	["lucide-folder-clock"] = "rbxassetid://10723384731",
-	["lucide-folder-closed"] = "rbxassetid://10723384893",
-	["lucide-folder-cog"] = "rbxassetid://10723385213",
-	["lucide-folder-cog-2"] = "rbxassetid://10723385036",
-	["lucide-folder-down"] = "rbxassetid://10723385338",
-	["lucide-folder-edit"] = "rbxassetid://10723385445",
-	["lucide-folder-heart"] = "rbxassetid://10723385545",
-	["lucide-folder-input"] = "rbxassetid://10723385721",
-	["lucide-folder-key"] = "rbxassetid://10723385848",
-	["lucide-folder-lock"] = "rbxassetid://10723386005",
-	["lucide-folder-minus"] = "rbxassetid://10723386127",
-	["lucide-folder-open"] = "rbxassetid://10723386277",
-	["lucide-folder-output"] = "rbxassetid://10723386386",
-	["lucide-folder-plus"] = "rbxassetid://10723386531",
-	["lucide-folder-search"] = "rbxassetid://10723386787",
-	["lucide-folder-search-2"] = "rbxassetid://10723386674",
-	["lucide-folder-symlink"] = "rbxassetid://10723386930",
-	["lucide-folder-tree"] = "rbxassetid://10723387085",
-	["lucide-folder-up"] = "rbxassetid://10723387265",
-	["lucide-folder-x"] = "rbxassetid://10723387448",
-	["lucide-folders"] = "rbxassetid://10723387721",
-	["lucide-form-input"] = "rbxassetid://10723387841",
-	["lucide-forward"] = "rbxassetid://10723388016",
-	["lucide-frame"] = "rbxassetid://10723394389",
-	["lucide-framer"] = "rbxassetid://10723394565",
-	["lucide-frown"] = "rbxassetid://10723394681",
-	["lucide-fuel"] = "rbxassetid://10723394846",
-	["lucide-function-square"] = "rbxassetid://10723395041",
-	["lucide-gamepad"] = "rbxassetid://10723395457",
-	["lucide-gamepad-2"] = "rbxassetid://10723395215",
-	["lucide-gauge"] = "rbxassetid://10723395708",
-	["lucide-gavel"] = "rbxassetid://10723395896",
-	["lucide-gem"] = "rbxassetid://10723396000",
-	["lucide-ghost"] = "rbxassetid://10723396107",
-	["lucide-gift"] = "rbxassetid://10723396402",
-	["lucide-gift-card"] = "rbxassetid://10723396225",
-	["lucide-git-branch"] = "rbxassetid://10723396676",
-	["lucide-git-branch-plus"] = "rbxassetid://10723396542",
-	["lucide-git-commit"] = "rbxassetid://10723396812",
-	["lucide-git-compare"] = "rbxassetid://10723396954",
-	["lucide-git-fork"] = "rbxassetid://10723397049",
-	["lucide-git-merge"] = "rbxassetid://10723397165",
-	["lucide-git-pull-request"] = "rbxassetid://10723397431",
-	["lucide-git-pull-request-closed"] = "rbxassetid://10723397268",
-	["lucide-git-pull-request-draft"] = "rbxassetid://10734884302",
-	["lucide-glass"] = "rbxassetid://10723397788",
-	["lucide-glass-2"] = "rbxassetid://10723397529",
-	["lucide-glass-water"] = "rbxassetid://10723397678",
-	["lucide-glasses"] = "rbxassetid://10723397895",
-	["lucide-globe"] = "rbxassetid://10723404337",
-	["lucide-globe-2"] = "rbxassetid://10723398002",
-	["lucide-grab"] = "rbxassetid://10723404472",
-	["lucide-graduation-cap"] = "rbxassetid://10723404691",
-	["lucide-grape"] = "rbxassetid://10723404822",
-	["lucide-grid"] = "rbxassetid://10723404936",
-	["lucide-grip-horizontal"] = "rbxassetid://10723405089",
-	["lucide-grip-vertical"] = "rbxassetid://10723405236",
-	["lucide-hammer"] = "rbxassetid://10723405360",
-	["lucide-hand"] = "rbxassetid://10723405649",
-	["lucide-hand-metal"] = "rbxassetid://10723405508",
-	["lucide-hard-drive"] = "rbxassetid://10723405749",
-	["lucide-hard-hat"] = "rbxassetid://10723405859",
-	["lucide-hash"] = "rbxassetid://10723405975",
-	["lucide-haze"] = "rbxassetid://10723406078",
-	["lucide-headphones"] = "rbxassetid://10723406165",
-	["lucide-heart"] = "rbxassetid://10723406885",
-	["lucide-heart-crack"] = "rbxassetid://10723406299",
-	["lucide-heart-handshake"] = "rbxassetid://10723406480",
-	["lucide-heart-off"] = "rbxassetid://10723406662",
-	["lucide-heart-pulse"] = "rbxassetid://10723406795",
-	["lucide-help-circle"] = "rbxassetid://10723406988",
-	["lucide-hexagon"] = "rbxassetid://10723407092",
-	["lucide-highlighter"] = "rbxassetid://10723407192",
-	["lucide-history"] = "rbxassetid://10723407335",
-	["lucide-home"] = "rbxassetid://10723407389",
-	["lucide-hourglass"] = "rbxassetid://10723407498",
-	["lucide-ice-cream"] = "rbxassetid://10723414308",
-	["lucide-image"] = "rbxassetid://10723415040",
-	["lucide-image-minus"] = "rbxassetid://10723414487",
-	["lucide-image-off"] = "rbxassetid://10723414677",
-	["lucide-image-plus"] = "rbxassetid://10723414827",
-	["lucide-import"] = "rbxassetid://10723415205",
-	["lucide-inbox"] = "rbxassetid://10723415335",
-	["lucide-indent"] = "rbxassetid://10723415494",
-	["lucide-indian-rupee"] = "rbxassetid://10723415642",
-	["lucide-infinity"] = "rbxassetid://10723415766",
-	["lucide-info"] = "rbxassetid://10723415903",
-	["lucide-inspect"] = "rbxassetid://10723416057",
-	["lucide-italic"] = "rbxassetid://10723416195",
-	["lucide-japanese-yen"] = "rbxassetid://10723416363",
-	["lucide-joystick"] = "rbxassetid://10723416527",
-	["lucide-key"] = "rbxassetid://10723416652",
-	["lucide-keyboard"] = "rbxassetid://10723416765",
-	["lucide-lamp"] = "rbxassetid://10723417513",
-	["lucide-lamp-ceiling"] = "rbxassetid://10723416922",
-	["lucide-lamp-desk"] = "rbxassetid://10723417016",
-	["lucide-lamp-floor"] = "rbxassetid://10723417131",
-	["lucide-lamp-wall-down"] = "rbxassetid://10723417240",
-	["lucide-lamp-wall-up"] = "rbxassetid://10723417356",
-	["lucide-landmark"] = "rbxassetid://10723417608",
-	["lucide-languages"] = "rbxassetid://10723417703",
-	["lucide-laptop"] = "rbxassetid://10723423881",
-	["lucide-laptop-2"] = "rbxassetid://10723417797",
-	["lucide-lasso"] = "rbxassetid://10723424235",
-	["lucide-lasso-select"] = "rbxassetid://10723424058",
-	["lucide-laugh"] = "rbxassetid://10723424372",
-	["lucide-layers"] = "rbxassetid://10723424505",
-	["lucide-layout"] = "rbxassetid://10723425376",
-	["lucide-layout-dashboard"] = "rbxassetid://10723424646",
-	["lucide-layout-grid"] = "rbxassetid://10723424838",
-	["lucide-layout-list"] = "rbxassetid://10723424963",
-	["lucide-layout-template"] = "rbxassetid://10723425187",
-	["lucide-leaf"] = "rbxassetid://10723425539",
-	["lucide-library"] = "rbxassetid://10723425615",
-	["lucide-life-buoy"] = "rbxassetid://10723425685",
-	["lucide-lightbulb"] = "rbxassetid://10723425852",
-	["lucide-lightbulb-off"] = "rbxassetid://10723425762",
-	["lucide-line-chart"] = "rbxassetid://10723426393",
-	["lucide-link"] = "rbxassetid://10723426722",
-	["lucide-link-2"] = "rbxassetid://10723426595",
-	["lucide-link-2-off"] = "rbxassetid://10723426513",
-	["lucide-list"] = "rbxassetid://10723433811",
-	["lucide-list-checks"] = "rbxassetid://10734884548",
-	["lucide-list-end"] = "rbxassetid://10723426886",
-	["lucide-list-minus"] = "rbxassetid://10723426986",
-	["lucide-list-music"] = "rbxassetid://10723427081",
-	["lucide-list-ordered"] = "rbxassetid://10723427199",
-	["lucide-list-plus"] = "rbxassetid://10723427334",
-	["lucide-list-start"] = "rbxassetid://10723427494",
-	["lucide-list-video"] = "rbxassetid://10723427619",
-	["lucide-list-todo"] = "rbxassetid://17376008003",
-	["lucide-list-x"] = "rbxassetid://10723433655",
-	["lucide-loader"] = "rbxassetid://10723434070",
-	["lucide-loader-2"] = "rbxassetid://10723433935",
-	["lucide-locate"] = "rbxassetid://10723434557",
-	["lucide-locate-fixed"] = "rbxassetid://10723434236",
-	["lucide-locate-off"] = "rbxassetid://10723434379",
-	["lucide-lock"] = "rbxassetid://10723434711",
-	["lucide-log-in"] = "rbxassetid://10723434830",
-	["lucide-log-out"] = "rbxassetid://10723434906",
-	["lucide-luggage"] = "rbxassetid://10723434993",
-	["lucide-magnet"] = "rbxassetid://10723435069",
-	["lucide-mail"] = "rbxassetid://10734885430",
-	["lucide-mail-check"] = "rbxassetid://10723435182",
-	["lucide-mail-minus"] = "rbxassetid://10723435261",
-	["lucide-mail-open"] = "rbxassetid://10723435342",
-	["lucide-mail-plus"] = "rbxassetid://10723435443",
-	["lucide-mail-question"] = "rbxassetid://10723435515",
-	["lucide-mail-search"] = "rbxassetid://10734884739",
-	["lucide-mail-warning"] = "rbxassetid://10734885015",
-	["lucide-mail-x"] = "rbxassetid://10734885247",
-	["lucide-mails"] = "rbxassetid://10734885614",
-	["lucide-map"] = "rbxassetid://10734886202",
-	["lucide-map-pin"] = "rbxassetid://10734886004",
-	["lucide-map-pin-off"] = "rbxassetid://10734885803",
-	["lucide-maximize"] = "rbxassetid://10734886735",
-	["lucide-maximize-2"] = "rbxassetid://10734886496",
-	["lucide-medal"] = "rbxassetid://10734887072",
-	["lucide-megaphone"] = "rbxassetid://10734887454",
-	["lucide-megaphone-off"] = "rbxassetid://10734887311",
-	["lucide-meh"] = "rbxassetid://10734887603",
-	["lucide-menu"] = "rbxassetid://10734887784",
-	["lucide-message-circle"] = "rbxassetid://10734888000",
-	["lucide-message-square"] = "rbxassetid://10734888228",
-	["lucide-mic"] = "rbxassetid://10734888864",
-	["lucide-mic-2"] = "rbxassetid://10734888430",
-	["lucide-mic-off"] = "rbxassetid://10734888646",
-	["lucide-microscope"] = "rbxassetid://10734889106",
-	["lucide-microwave"] = "rbxassetid://10734895076",
-	["lucide-milestone"] = "rbxassetid://10734895310",
-	["lucide-minimize"] = "rbxassetid://10734895698",
-	["lucide-minimize-2"] = "rbxassetid://10734895530",
-	["lucide-minus"] = "rbxassetid://10734896206",
-	["lucide-minus-circle"] = "rbxassetid://10734895856",
-	["lucide-minus-square"] = "rbxassetid://10734896029",
-	["lucide-monitor"] = "rbxassetid://10734896881",
-	["lucide-monitor-off"] = "rbxassetid://10734896360",
-	["lucide-monitor-speaker"] = "rbxassetid://10734896512",
-	["lucide-moon"] = "rbxassetid://10734897102",
-	["lucide-more-horizontal"] = "rbxassetid://10734897250",
-	["lucide-more-vertical"] = "rbxassetid://10734897387",
-	["lucide-mountain"] = "rbxassetid://10734897956",
-	["lucide-mountain-snow"] = "rbxassetid://10734897665",
-	["lucide-mouse"] = "rbxassetid://10734898592",
-	["lucide-mouse-pointer"] = "rbxassetid://10734898476",
-	["lucide-mouse-pointer-2"] = "rbxassetid://10734898194",
-	["lucide-mouse-pointer-click"] = "rbxassetid://10734898355",
-	["lucide-move"] = "rbxassetid://10734900011",
-	["lucide-move-3d"] = "rbxassetid://10734898756",
-	["lucide-move-diagonal"] = "rbxassetid://10734899164",
-	["lucide-move-diagonal-2"] = "rbxassetid://10734898934",
-	["lucide-move-horizontal"] = "rbxassetid://10734899414",
-	["lucide-move-vertical"] = "rbxassetid://10734899821",
-	["lucide-music"] = "rbxassetid://10734905958",
-	["lucide-music-2"] = "rbxassetid://10734900215",
-	["lucide-music-3"] = "rbxassetid://10734905665",
-	["lucide-music-4"] = "rbxassetid://10734905823",
-	["lucide-navigation"] = "rbxassetid://10734906744",
-	["lucide-navigation-2"] = "rbxassetid://10734906332",
-	["lucide-navigation-2-off"] = "rbxassetid://10734906144",
-	["lucide-navigation-off"] = "rbxassetid://10734906580",
-	["lucide-network"] = "rbxassetid://10734906975",
-	["lucide-newspaper"] = "rbxassetid://10734907168",
-	["lucide-octagon"] = "rbxassetid://10734907361",
-	["lucide-option"] = "rbxassetid://10734907649",
-	["lucide-outdent"] = "rbxassetid://10734907933",
-	["lucide-package"] = "rbxassetid://10734909540",
-	["lucide-package-2"] = "rbxassetid://10734908151",
-	["lucide-package-check"] = "rbxassetid://10734908384",
-	["lucide-package-minus"] = "rbxassetid://10734908626",
-	["lucide-package-open"] = "rbxassetid://10734908793",
-	["lucide-package-plus"] = "rbxassetid://10734909016",
-	["lucide-package-search"] = "rbxassetid://10734909196",
-	["lucide-package-x"] = "rbxassetid://10734909375",
-	["lucide-paint-bucket"] = "rbxassetid://10734909847",
-	["lucide-paintbrush"] = "rbxassetid://10734910187",
-	["lucide-paintbrush-2"] = "rbxassetid://10734910030",
-	["lucide-palette"] = "rbxassetid://10734910430",
-	["lucide-palmtree"] = "rbxassetid://10734910680",
-	["lucide-paperclip"] = "rbxassetid://10734910927",
-	["lucide-party-popper"] = "rbxassetid://10734918735",
-	["lucide-pause"] = "rbxassetid://10734919336",
-	["lucide-pause-circle"] = "rbxassetid://10735024209",
-	["lucide-pause-octagon"] = "rbxassetid://10734919143",
-	["lucide-pen-tool"] = "rbxassetid://10734919503",
-	["lucide-pencil"] = "rbxassetid://10734919691",
-	["lucide-percent"] = "rbxassetid://10734919919",
-	["lucide-person-standing"] = "rbxassetid://10734920149",
-	["lucide-phone"] = "rbxassetid://10734921524",
-	["lucide-phone-call"] = "rbxassetid://10734920305",
-	["lucide-phone-forwarded"] = "rbxassetid://10734920508",
-	["lucide-phone-incoming"] = "rbxassetid://10734920694",
-	["lucide-phone-missed"] = "rbxassetid://10734920845",
-	["lucide-phone-off"] = "rbxassetid://10734921077",
-	["lucide-phone-outgoing"] = "rbxassetid://10734921288",
-	["lucide-pie-chart"] = "rbxassetid://10734921727",
-	["lucide-piggy-bank"] = "rbxassetid://10734921935",
-	["lucide-pin"] = "rbxassetid://10734922324",
-	["lucide-pin-off"] = "rbxassetid://10734922180",
-	["lucide-pipette"] = "rbxassetid://10734922497",
-	["lucide-pizza"] = "rbxassetid://10734922774",
-	["lucide-plane"] = "rbxassetid://10734922971",
-	["lucide-plane-landing"] = "rbxassetid://17376029914",
-	["lucide-play"] = "rbxassetid://10734923549",
-	["lucide-play-circle"] = "rbxassetid://10734923214",
-	["lucide-plus"] = "rbxassetid://10734924532",
-	["lucide-plus-circle"] = "rbxassetid://10734923868",
-	["lucide-plus-square"] = "rbxassetid://10734924219",
-	["lucide-podcast"] = "rbxassetid://10734929553",
-	["lucide-pointer"] = "rbxassetid://10734929723",
-	["lucide-pound-sterling"] = "rbxassetid://10734929981",
-	["lucide-power"] = "rbxassetid://10734930466",
-	["lucide-power-off"] = "rbxassetid://10734930257",
-	["lucide-printer"] = "rbxassetid://10734930632",
-	["lucide-puzzle"] = "rbxassetid://10734930886",
-	["lucide-quote"] = "rbxassetid://10734931234",
-	["lucide-radio"] = "rbxassetid://10734931596",
-	["lucide-radio-receiver"] = "rbxassetid://10734931402",
-	["lucide-rectangle-horizontal"] = "rbxassetid://10734931777",
-	["lucide-rectangle-vertical"] = "rbxassetid://10734932081",
-	["lucide-recycle"] = "rbxassetid://10734932295",
-	["lucide-redo"] = "rbxassetid://10734932822",
-	["lucide-redo-2"] = "rbxassetid://10734932586",
-	["lucide-refresh-ccw"] = "rbxassetid://10734933056",
-	["lucide-refresh-cw"] = "rbxassetid://10734933222",
-	["lucide-refrigerator"] = "rbxassetid://10734933465",
-	["lucide-regex"] = "rbxassetid://10734933655",
-	["lucide-repeat"] = "rbxassetid://10734933966",
-	["lucide-repeat-1"] = "rbxassetid://10734933826",
-	["lucide-reply"] = "rbxassetid://10734934252",
-	["lucide-reply-all"] = "rbxassetid://10734934132",
-	["lucide-rewind"] = "rbxassetid://10734934347",
-	["lucide-rocket"] = "rbxassetid://10734934585",
-	["lucide-rocking-chair"] = "rbxassetid://10734939942",
-	["lucide-rotate-3d"] = "rbxassetid://10734940107",
-	["lucide-rotate-ccw"] = "rbxassetid://10734940376",
-	["lucide-rotate-cw"] = "rbxassetid://10734940654",
-	["lucide-rss"] = "rbxassetid://10734940825",
-	["lucide-ruler"] = "rbxassetid://10734941018",
-	["lucide-russian-ruble"] = "rbxassetid://10734941199",
-	["lucide-sailboat"] = "rbxassetid://10734941354",
-	["lucide-save"] = "rbxassetid://10734941499",
-	["lucide-scale"] = "rbxassetid://10734941912",
-	["lucide-scale-3d"] = "rbxassetid://10734941739",
-	["lucide-scaling"] = "rbxassetid://10734942072",
-	["lucide-scan"] = "rbxassetid://10734942565",
-	["lucide-scan-face"] = "rbxassetid://10734942198",
-	["lucide-scan-line"] = "rbxassetid://10734942351",
-	["lucide-scissors"] = "rbxassetid://10734942778",
-	["lucide-screen-share"] = "rbxassetid://10734943193",
-	["lucide-screen-share-off"] = "rbxassetid://10734942967",
-	["lucide-scroll"] = "rbxassetid://10734943448",
-	["lucide-search"] = "rbxassetid://10734943674",
-	["lucide-send"] = "rbxassetid://10734943902",
-	["lucide-separator-horizontal"] = "rbxassetid://10734944115",
-	["lucide-separator-vertical"] = "rbxassetid://10734944326",
-	["lucide-server"] = "rbxassetid://10734949856",
-	["lucide-server-cog"] = "rbxassetid://10734944444",
-	["lucide-server-crash"] = "rbxassetid://10734944554",
-	["lucide-server-off"] = "rbxassetid://10734944668",
-	["lucide-settings"] = "rbxassetid://10734950309",
-	["lucide-settings-2"] = "rbxassetid://10734950020",
-	["lucide-share"] = "rbxassetid://10734950813",
-	["lucide-share-2"] = "rbxassetid://10734950553",
-	["lucide-sheet"] = "rbxassetid://10734951038",
-	["lucide-shield"] = "rbxassetid://10734951847",
-	["lucide-shield-alert"] = "rbxassetid://10734951173",
-	["lucide-shield-check"] = "rbxassetid://10734951367",
-	["lucide-shield-close"] = "rbxassetid://10734951535",
-	["lucide-shield-off"] = "rbxassetid://10734951684",
-	["lucide-shirt"] = "rbxassetid://10734952036",
-	["lucide-shopping-bag"] = "rbxassetid://10734952273",
-	["lucide-shopping-cart"] = "rbxassetid://10734952479",
-	["lucide-shovel"] = "rbxassetid://10734952773",
-	["lucide-shower-head"] = "rbxassetid://10734952942",
-	["lucide-shrink"] = "rbxassetid://10734953073",
-	["lucide-shrub"] = "rbxassetid://10734953241",
-	["lucide-shuffle"] = "rbxassetid://10734953451",
-	["lucide-sidebar"] = "rbxassetid://10734954301",
-	["lucide-sidebar-close"] = "rbxassetid://10734953715",
-	["lucide-sidebar-open"] = "rbxassetid://10734954000",
-	["lucide-sigma"] = "rbxassetid://10734954538",
-	["lucide-signal"] = "rbxassetid://10734961133",
-	["lucide-signal-high"] = "rbxassetid://10734954807",
-	["lucide-signal-low"] = "rbxassetid://10734955080",
-	["lucide-signal-medium"] = "rbxassetid://10734955336",
-	["lucide-signal-zero"] = "rbxassetid://10734960878",
-	["lucide-siren"] = "rbxassetid://10734961284",
-	["lucide-skip-back"] = "rbxassetid://10734961526",
-	["lucide-skip-forward"] = "rbxassetid://10734961809",
-	["lucide-skull"] = "rbxassetid://10734962068",
-	["lucide-slack"] = "rbxassetid://10734962339",
-	["lucide-slash"] = "rbxassetid://10734962600",
-	["lucide-slice"] = "rbxassetid://10734963024",
-	["lucide-sliders"] = "rbxassetid://10734963400",
-	["lucide-sliders-horizontal"] = "rbxassetid://10734963191",
-	["lucide-smartphone"] = "rbxassetid://10734963940",
-	["lucide-smartphone-charging"] = "rbxassetid://10734963671",
-	["lucide-smile"] = "rbxassetid://10734964441",
-	["lucide-smile-plus"] = "rbxassetid://10734964188",
-	["lucide-snowflake"] = "rbxassetid://10734964600",
-	["lucide-sofa"] = "rbxassetid://10734964852",
-	["lucide-sort-asc"] = "rbxassetid://10734965115",
-	["lucide-sort-desc"] = "rbxassetid://10734965287",
-	["lucide-speaker"] = "rbxassetid://10734965419",
-	["lucide-sprout"] = "rbxassetid://10734965572",
-	["lucide-square"] = "rbxassetid://10734965702",
-	["lucide-star"] = "rbxassetid://10734966248",
-	["lucide-star-half"] = "rbxassetid://10734965897",
-	["lucide-star-off"] = "rbxassetid://10734966097",
-	["lucide-stethoscope"] = "rbxassetid://10734966384",
-	["lucide-sticker"] = "rbxassetid://10734972234",
-	["lucide-sticky-note"] = "rbxassetid://10734972463",
-	["lucide-stop-circle"] = "rbxassetid://10734972621",
-	["lucide-stretch-horizontal"] = "rbxassetid://10734972862",
-	["lucide-stretch-vertical"] = "rbxassetid://10734973130",
-	["lucide-strikethrough"] = "rbxassetid://10734973290",
-	["lucide-subscript"] = "rbxassetid://10734973457",
-	["lucide-sun"] = "rbxassetid://10734974297",
-	["lucide-sun-dim"] = "rbxassetid://10734973645",
-	["lucide-sun-medium"] = "rbxassetid://10734973778",
-	["lucide-sun-moon"] = "rbxassetid://10734973999",
-	["lucide-sun-snow"] = "rbxassetid://10734974130",
-	["lucide-sunrise"] = "rbxassetid://10734974522",
-	["lucide-sunset"] = "rbxassetid://10734974689",
-	["lucide-superscript"] = "rbxassetid://10734974850",
-	["lucide-swiss-franc"] = "rbxassetid://10734975024",
-	["lucide-switch-camera"] = "rbxassetid://10734975214",
-	["lucide-sword"] = "rbxassetid://10734975486",
-	["lucide-swords"] = "rbxassetid://10734975692",
-	["lucide-syringe"] = "rbxassetid://10734975932",
-	["lucide-table"] = "rbxassetid://10734976230",
-	["lucide-table-2"] = "rbxassetid://10734976097",
-	["lucide-tablet"] = "rbxassetid://10734976394",
-	["lucide-tag"] = "rbxassetid://10734976528",
-	["lucide-tags"] = "rbxassetid://10734976739",
-	["lucide-target"] = "rbxassetid://10734977012",
-	["lucide-tent"] = "rbxassetid://10734981750",
-	["lucide-terminal"] = "rbxassetid://10734982144",
-	["lucide-terminal-square"] = "rbxassetid://10734981995",
-	["lucide-text-cursor"] = "rbxassetid://10734982395",
-	["lucide-text-cursor-input"] = "rbxassetid://10734982297",
-	["lucide-thermometer"] = "rbxassetid://10734983134",
-	["lucide-thermometer-snowflake"] = "rbxassetid://10734982571",
-	["lucide-thermometer-sun"] = "rbxassetid://10734982771",
-	["lucide-thumbs-down"] = "rbxassetid://10734983359",
-	["lucide-thumbs-up"] = "rbxassetid://10734983629",
-	["lucide-ticket"] = "rbxassetid://10734983868",
-	["lucide-timer"] = "rbxassetid://10734984606",
-	["lucide-timer-off"] = "rbxassetid://10734984138",
-	["lucide-timer-reset"] = "rbxassetid://10734984355",
-	["lucide-toggle-left"] = "rbxassetid://10734984834",
-	["lucide-toggle-right"] = "rbxassetid://10734985040",
-	["lucide-tornado"] = "rbxassetid://10734985247",
-	["lucide-toy-brick"] = "rbxassetid://10747361919",
-	["lucide-train"] = "rbxassetid://10747362105",
-	["lucide-trash"] = "rbxassetid://10747362393",
-	["lucide-trash-2"] = "rbxassetid://10747362241",
-	["lucide-tree-deciduous"] = "rbxassetid://10747362534",
-	["lucide-tree-pine"] = "rbxassetid://10747362748",
-	["lucide-trees"] = "rbxassetid://10747363016",
-	["lucide-trending-down"] = "rbxassetid://10747363205",
-	["lucide-trending-up"] = "rbxassetid://10747363465",
-	["lucide-triangle"] = "rbxassetid://10747363621",
-	["lucide-trophy"] = "rbxassetid://10747363809",
-	["lucide-truck"] = "rbxassetid://10747364031",
-	["lucide-tv"] = "rbxassetid://10747364593",
-	["lucide-tv-2"] = "rbxassetid://10747364302",
-	["lucide-type"] = "rbxassetid://10747364761",
-	["lucide-umbrella"] = "rbxassetid://10747364971",
-	["lucide-underline"] = "rbxassetid://10747365191",
-	["lucide-undo"] = "rbxassetid://10747365484",
-	["lucide-undo-2"] = "rbxassetid://10747365359",
-	["lucide-unlink"] = "rbxassetid://10747365771",
-	["lucide-unlink-2"] = "rbxassetid://10747397871",
-	["lucide-unlock"] = "rbxassetid://10747366027",
-	["lucide-upload"] = "rbxassetid://10747366434",
-	["lucide-upload-cloud"] = "rbxassetid://10747366266",
-	["lucide-usb"] = "rbxassetid://10747366606",
-	["lucide-user"] = "rbxassetid://10747373176",
-	["lucide-user-check"] = "rbxassetid://10747371901",
-	["lucide-user-cog"] = "rbxassetid://10747372167",
-	["lucide-user-minus"] = "rbxassetid://10747372346",
-	["lucide-user-plus"] = "rbxassetid://10747372702",
-	["lucide-user-x"] = "rbxassetid://10747372992",
-	["lucide-users"] = "rbxassetid://10747373426",
-	["lucide-utensils"] = "rbxassetid://10747373821",
-	["lucide-utensils-crossed"] = "rbxassetid://10747373629",
-	["lucide-venetian-mask"] = "rbxassetid://10747374003",
-	["lucide-verified"] = "rbxassetid://10747374131",
-	["lucide-vibrate"] = "rbxassetid://10747374489",
-	["lucide-vibrate-off"] = "rbxassetid://10747374269",
-	["lucide-video"] = "rbxassetid://10747374938",
-	["lucide-video-off"] = "rbxassetid://10747374721",
-	["lucide-view"] = "rbxassetid://10747375132",
-	["lucide-voicemail"] = "rbxassetid://10747375281",
-	["lucide-volume"] = "rbxassetid://10747376008",
-	["lucide-volume-1"] = "rbxassetid://10747375450",
-	["lucide-volume-2"] = "rbxassetid://10747375679",
-	["lucide-volume-x"] = "rbxassetid://10747375880",
-	["lucide-wheat"] = "rbxassetid://80877624162595",
-	["lucide-wallet"] = "rbxassetid://10747376205",
-	["lucide-wand"] = "rbxassetid://10747376565",
-	["lucide-wand-2"] = "rbxassetid://10747376349",
-	["lucide-watch"] = "rbxassetid://10747376722",
-	["lucide-waves"] = "rbxassetid://10747376931",
-	["lucide-webcam"] = "rbxassetid://10747381992",
-	["lucide-wifi"] = "rbxassetid://10747382504",
-	["lucide-wifi-off"] = "rbxassetid://10747382268",
-	["lucide-wind"] = "rbxassetid://10747382750",
-	["lucide-wrap-text"] = "rbxassetid://10747383065",
-	["lucide-wrench"] = "rbxassetid://10747383470",
-	["lucide-x"] = "rbxassetid://10747384394",
-	["lucide-x-circle"] = "rbxassetid://10747383819",
-	["lucide-x-octagon"] = "rbxassetid://10747384037",
-	["lucide-x-square"] = "rbxassetid://10747384217",
-	["lucide-zoom-in"] = "rbxassetid://10747384552",
-	["lucide-zoom-out"] = "rbxassetid://10747384679",
-	["lucide-cat"] = "rbxassetid://16935650691",
-	["lucide-message-circle-question"] = "rbxassetid://16970049192",
-	["lucide-webhook"] = "rbxassetid://17320556264",
-	["lucide-dumbbell"] = "rbxassetid://18273453053"
-}
-
 
 function Library:GetIcon(Name)
 	if Name ~= nil and Icons["lucide-" .. Name] then
@@ -11510,101 +10778,123 @@ end
 
 local SaveManager = {} do
 
+
+
 	SaveManager.Folder = "FluentSettings"
+
 
 	SaveManager.Ignore = {}
 
+
 	SaveManager.Parser = {
 		Toggle = {
-			Save = function(idx, object) 
-
-				return { type = "Toggle", idx = idx, value = object.Value } 
-
+			Save = function(idx, object)
+				return { type = "Toggle", idx = idx, value = object.Value }
 			end,
-
 			Load = function(idx, data)
-
-				if SaveManager.Options[idx] then 
-
-					SaveManager.Options[idx]:SetValue(data.value)
-
-				end
-
+				if SaveManager.Options[idx] then SaveManager.Options[idx]:SetValue(data.value) end
 			end,
 		},
-
 		Slider = {
 			Save = function(idx, object)
-
 				return { type = "Slider", idx = idx, value = tostring(object.Value) }
-
 			end,
-
 			Load = function(idx, data)
-
-				if SaveManager.Options[idx] then 
-
-					SaveManager.Options[idx]:SetValue(data.value)
-
-				end
-
+				if SaveManager.Options[idx] then SaveManager.Options[idx]:SetValue(tonumber(data.value) or 0) end
 			end,
 		},
-
 		Dropdown = {
 			Save = function(idx, object)
-
-				return { type = "Dropdown", idx = idx, value = object.Value, mutli = object.Multi }
-
+				return { type = "Dropdown", idx = idx, value = object.Value, multi = object.Multi }
 			end,
-
 			Load = function(idx, data)
-
-				if SaveManager.Options[idx] then 
-
-					SaveManager.Options[idx]:SetValue(data.value)
-
-				end
-
+				if SaveManager.Options[idx] then SaveManager.Options[idx]:SetValue(data.value) end
 			end,
 		},
-
 		Colorpicker = {
 			Save = function(idx, object)
-
 				return { type = "Colorpicker", idx = idx, value = object.Value:ToHex(), transparency = object.Transparency }
-
 			end,
-
 			Load = function(idx, data)
-
-				if SaveManager.Options[idx] then 
-
-					SaveManager.Options[idx]:SetValueRGB(Color3.fromHex(data.value), data.transparency)
-
-				end
-
+				if SaveManager.Options[idx] then SaveManager.Options[idx]:SetValueRGB(Color3.fromHex(data.value), data.transparency) end
 			end,
 		},
-
 		Keybind = {
 			Save = function(idx, object)
-
 				return { type = "Keybind", idx = idx, mode = object.Mode, key = object.Value }
-
 			end,
-
 			Load = function(idx, data)
-
-				if SaveManager.Options[idx] then 
-
-					SaveManager.Options[idx]:SetValue(data.key, data.mode)
-
-				end
-
+				if SaveManager.Options[idx] then SaveManager.Options[idx]:SetValue(data.key, data.mode) end
 			end,
 		},
-
+		Input = {
+			Save = function(idx, object)
+				return { type = "Input", idx = idx, text = object.Value }
+			end,
+			Load = function(idx, data)
+				if SaveManager.Options[idx] and type(data.text) == "string" then SaveManager.Options[idx]:SetValue(data.text) end
+			end,
+		},
+		MiniBar = {
+			Save = function(idx, object)
+				return { type = "MiniBar", idx = idx, value = object.Value }
+			end,
+			Load = function(idx, data)
+				if SaveManager.Options[idx] then SaveManager.Options[idx]:SetValue(data.value or 0) end
+			end,
+		},
+		Checkbox = {
+			Save = function(idx, object)
+				return { type = "Checkbox", idx = idx, value = object.Value }
+			end,
+			Load = function(idx, data)
+				if SaveManager.Options[idx] then SaveManager.Options[idx]:SetValue(data.value) end
+			end,
+		},
+		RadioGroup = {
+			Save = function(idx, object)
+				return { type = "RadioGroup", idx = idx, value = object.Value, isMulti = object.IsMulti }
+			end,
+			Load = function(idx, data)
+				if SaveManager.Options[idx] then SaveManager.Options[idx]:SetValue(data.value) end
+			end,
+		},
+		NumberInput = {
+			Save = function(idx, object)
+				return { type = "NumberInput", idx = idx, value = object.Value }
+			end,
+			Load = function(idx, data)
+				if SaveManager.Options[idx] then SaveManager.Options[idx]:SetValue(data.value or 0) end
+			end,
+		},
+		Chip = {
+			Save = function(idx, object)
+				return { type = "Chip", idx = idx, value = table.concat(object.Value, ",") }
+			end,
+			Load = function(idx, data)
+				if SaveManager.Options[idx] then
+					local vals = {}
+					for v in (data.value or ""):gmatch("[^,]+") do table.insert(vals, v) end
+					SaveManager.Options[idx]:SetValue(vals)
+				end
+			end,
+		},
+		CounterButton = {
+			Save = function(idx, object)
+				return { type = "CounterButton", idx = idx, value = object.Value }
+			end,
+			Load = function(idx, data)
+				if SaveManager.Options[idx] then SaveManager.Options[idx]:SetValue(data.value) end
+			end,
+		},
+		ToggleGroup = {
+			Save = function(idx, object)
+				return { type = "ToggleGroup", idx = idx, value = object.Value }
+			end,
+			Load = function(idx, data)
+				if SaveManager.Options[idx] then SaveManager.Options[idx]:SetValue(data.value) end
+			end,
+		},
 		LiveLabel = {
 			Save = function(idx, object)
 				return { type = "LiveLabel", idx = idx, value = object.Value, ltype = object._type }
@@ -11616,738 +10906,1177 @@ local SaveManager = {} do
 				end
 			end,
 		},
-
-		Input = {
+		Timer = {
 			Save = function(idx, object)
-
-				return { type = "Input", idx = idx, text = object.Value }
-
+				return { type = "Timer", idx = idx, value = object.Value, running = object.Running }
 			end,
-
 			Load = function(idx, data)
-
-				if SaveManager.Options[idx] and type(data.text) == "string" then
-
-					SaveManager.Options[idx]:SetValue(data.text)
-
-				end
-
+				-- ไม่ restore Running state เพื่อความปลอดภัย ให้ user กด play เอง
 			end,
 		},
-
-		-- ✨ New Element Parsers ✨
-
-		MiniBar = {
+		Accordion = {
 			Save = function(idx, object)
-				return { type = "MiniBar", idx = idx, value = object.Value }
+				return { type = "Accordion", idx = idx, opened = object.Opened }
 			end,
 			Load = function(idx, data)
 				if SaveManager.Options[idx] then
-					SaveManager.Options[idx]:SetValue(data.value)
+					if data.opened then SaveManager.Options[idx]:Open()
+					else SaveManager.Options[idx]:Close() end
 				end
-			end,
-		},
-
-		Checkbox = {
-			Save = function(idx, object)
-				return { type = "Checkbox", idx = idx, value = object.Value }
-			end,
-			Load = function(idx, data)
-				if SaveManager.Options[idx] then
-					SaveManager.Options[idx]:SetValue(data.value)
-				end
-			end,
-		},
-
-		RadioGroup = {
-			Save = function(idx, object)
-				return { type = "RadioGroup", idx = idx, value = object.Value }
-			end,
-			Load = function(idx, data)
-				if SaveManager.Options[idx] then
-					SaveManager.Options[idx]:SetValue(data.value)
-				end
-			end,
-		},
-
-		NumberInput = {
-			Save = function(idx, object)
-				return { type = "NumberInput", idx = idx, value = object.Value }
-			end,
-			Load = function(idx, data)
-				if SaveManager.Options[idx] then
-					SaveManager.Options[idx]:SetValue(data.value)
-				end
-			end,
-		},
-
-		TagInput = {
-			Save = function(idx, object)
-				return { type = "TagInput", idx = idx, value = table.concat(object.Value, ",") }
-			end,
-			Load = function(idx, data)
-				if SaveManager.Options[idx] then
-					local tags = {}
-					for t in (data.value or ""):gmatch("[^,]+") do
-						table.insert(tags, t)
-					end
-					SaveManager.Options[idx]:SetValue(tags)
-				end
-			end,
-		},
-
-		Chip = {
-			Save = function(idx, object)
-				return { type = "Chip", idx = idx, value = table.concat(object.Value, ",") }
-			end,
-			Load = function(idx, data)
-				if SaveManager.Options[idx] then
-					local vals = {}
-					for v in (data.value or ""):gmatch("[^,]+") do
-						table.insert(vals, v)
-					end
-					SaveManager.Options[idx]:SetValue(vals)
-				end
-			end,
-		},
-
-		SearchBar = {
-			Save = function(idx, object)
-				return { type = "SearchBar", idx = idx, value = object.Value }
-			end,
-			Load = function(idx, data)
-				if SaveManager.Options[idx] then SaveManager.Options[idx]:SetValue(data.value or "") end
-			end,
-		},
-
-		CounterButton = {
-			Save = function(idx, object)
-				return { type = "CounterButton", idx = idx, value = object.Value }
-			end,
-			Load = function(idx, data)
-				if SaveManager.Options[idx] then SaveManager.Options[idx]:SetValue(data.value) end
-			end,
-		},
-
-		ToggleGroup = {
-			Save = function(idx, object)
-				return { type = "ToggleGroup", idx = idx, value = object.Value }
-			end,
-			Load = function(idx, data)
-				if SaveManager.Options[idx] then SaveManager.Options[idx]:SetValue(data.value) end
-			end,
-		},
-
-		NotifBadge = {
-			Save = function(idx, object)
-				return { type = "NotifBadge", idx = idx, count = object.Count }
-			end,
-			Load = function(idx, data)
-				if SaveManager.Options[idx] then SaveManager.Options[idx]:SetCount(data.count or 0) end
 			end,
 		},
 	}
-
 	function SaveManager:SetIgnoreIndexes(list)
+
 
 		for _, key in next, list do
 
+
 			self.Ignore[key] = true
+
 
 		end
 
+
 	end
+
 
 	function SaveManager:SetFolder(folder)
 
+
 		self.Folder = folder;
+
 
 		self:BuildFolderTree()
 
+
 	end
+
+
+
+
 
 	function SaveManager:Save(name)
 
+
 		if (not name) then
+
 
 			return false, "no config file is selected"
 
+
 		end
+
+
+
+
 
 		local fullPath = self.Folder .. "/" .. name .. ".json"
 
+
+
+
+
 		local data = {
+
+
 			objects = {}
+
+
 		}
+
+
+
+
+
+
+
 
 		for idx, option in next, SaveManager.Options do
 
+
 			if self.Parser[option.Type] and not self.Ignore[idx] then
+
 
 				table.insert(data.objects, self.Parser[option.Type].Save(idx, option))
 
+
 			end
+
 
 		end	
 
+
+
+
+
 		local success, encoded = pcall(httpService.JSONEncode, httpService, data)
+
 
 		if not success then
 
+
 			return false, "failed to encode data"
 
+
 		end
+
+
+
+
 
 		writefile(fullPath, encoded)
 
+
 		return true
+
 
 	end
 
+
+
+
+
 	if not RunService:IsStudio() then
+
 
 		function SaveManager:Load(name)
 
+
 			if (not name) then
+
 
 				return false, "no config file is selected"
 
+
 			end
+
+
+
+
 
 			local file = self.Folder .. "/" .. name .. ".json"
 
+
 			if not isfile(file) then return false, "Create Config Save File" end
+
+
+
+
 
 			local success, decoded = pcall(httpService.JSONDecode, httpService, readfile(file))
 
+
 			if not success then return false, "decode error" end
+
+
+
+
 
 			for _, option in next, decoded.objects do
 
+
 				if self.Parser[option.type] and not self.Ignore[option.idx] then
+
 
 					task.spawn(function() self.Parser[option.type].Load(option.idx, option) end)
 
+
 				end
 
+
 			end
+
+
+
+
 
 			Fluent.SettingLoaded = true
 
+
+
+
+
 			return true, decoded
+
 
 		end
 
+
 	end
+
+
+
+
 
 	SaveManager.IgnoreThemeSettings = function(self)
 
+
 		self:SetIgnoreIndexes({ 
 
+
 			"InterfaceTheme", "AcrylicToggle", "TransparentToggle", "MenuKeybind"
+
+
 		})
 
+
 	end
+
+
+
+
 
 	function SaveManager:BuildFolderTree()
 
+
 		local paths = {
+
+
 			self.Folder,
 
+
 			self.Folder .. "/"
+
+
 		}
+
+
+
+
 
 		for i = 1, #paths do
 
+
 			local str = paths[i]
+
 
 			if not isfolder(str) then
 
+
 				makefolder(str)
+
 
 			end
 
+
 		end
 
+
 	end
+
+
+
+
 
 	function SaveManager:RefreshConfigList()
 
+
 		local list = listfiles(self.Folder .. "/")
+
+
+
+
 
 		local out = {}
 
+
 		for i = 1, #list do
+
 
 			local file = list[i]
 
+
 			if file:sub(-5) == ".json" then
+
 
 				local pos = file:find(".json", 1, true)
 
+
 				local start = pos
+
+
+
+
 
 				local char = file:sub(pos, pos)
 
+
 				while char ~= "/" and char ~= "\\" and char ~= "" do
+
 
 					pos = pos - 1
 
+
 					char = file:sub(pos, pos)
 
+
 				end
+
+
+
+
 
 				if char == "/" or char == "\\" then
 
+
 					local name = file:sub(pos + 1, start - 1)
+
 
 					if name ~= "options" then
 
+
 						table.insert(out, name)
+
 
 					end
 
+
 				end
+
 
 			end
 
+
 		end
+
+
+
+
 
 		return out
 
+
 	end
+
+
+
+
 
 	function SaveManager:SetLibrary(library)
 
+
 		self.Library = library
+
 
 		self.Options = library.Options
 
+
 	end
 
+
+
+
+
 	if not RunService:IsStudio() then
+
 
 		function SaveManager:LoadAutoloadConfig()
 
+
 			if isfile(self.Folder .. "/autoload.txt") then
+
 
 				local name = readfile(self.Folder .. "/autoload.txt")
 
+
+
+
+
 				local success, err = self:Load(name)
+
 
 				if not success then
 
+
 					return self.Library:Notify({
+
+
 						Title = "Interface",
 
+
 						Content = "Config loader",
+
 
 						SubContent = "Failed to load autoload config: " .. err,
 
+
 						Duration = 7
+
+
 					})
+
 
 				end
 
+
+
+
+
 				self.Library:Notify({
+
+
 					Title = "Interface",
 
+
 					Content = "Config loader",
+
 
 					SubContent = string.format("Auto loaded config %q", name),
 
+
 					Duration = 7
+
+
 				})
+
 
 			end
 
+
 		end
 
+
 	end
+
+
+
+
 
 	function SaveManager:BuildConfigSection(tab)
 
+
 		assert(self.Library, "Must set SaveManager.Library")
+
+
+
+
 
 		local section = tab:AddSection("Configuration", "settings")
 
+
+
+
+
 		section:AddInput("SaveManager_ConfigName",    { Title = "Config name" })
+
 
 		section:AddDropdown("SaveManager_ConfigList", { Title = "Config list", Values = self:RefreshConfigList(), AllowNull = true })
 
+
+
+
+
 		section:AddButton({
+
+
 			Title = "Create config",
+
 
 			Callback = function()
 
+
 				local name = SaveManager.Options.SaveManager_ConfigName.Value
+
+
+
+
 
 				if name:gsub(" ", "") == "" then 
 
+
 					return self.Library:Notify({
+
+
 						Title = "Interface",
 
+
 						Content = "Config loader",
+
 
 						SubContent = "Invalid config name (empty)",
 
+
 						Duration = 7
+
+
 					})
 
+
 				end
+
+
+
+
 
 				local success, err = self:Save(name)
 
+
 				if not success then
 
+
 					return self.Library:Notify({
+
+
 						Title = "Interface",
+
 
 						Content = "Config loader",
 
+
 						SubContent = "Failed to save config: " .. err,
 
+
 						Duration = 7
+
+
 					})
+
 
 				end
 
+
+
+
+
 				self.Library:Notify({
+
+
 					Title = "Interface",
 
+
 					Content = "Config loader",
+
 
 					SubContent = string.format("Created config %q", name),
 
+
 					Duration = 7
+
+
 				})
+
+
+
+
 
 				SaveManager.Options.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
 
+
 				SaveManager.Options.SaveManager_ConfigList:SetValue(nil)
 
+
 			end
+
+
 		})
+
+
+
+
 
 		section:AddButton({Title = "Load config", Callback = function()
 
+
 			local name = SaveManager.Options.SaveManager_ConfigList.Value
+
+
+
+
 
 			local success, err = self:Load(name)
 
+
 			if not success then
 
+
 				return self.Library:Notify({
+
+
 					Title = "Interface",
 
+
 					Content = "Config loader",
+
 
 					SubContent = "Failed to load config: " .. err,
 
+
 					Duration = 7
+
+
 				})
+
 
 			end
 
+
+
+
+
 			self.Library:Notify({
+
+
 				Title = "Interface",
 
+
 				Content = "Config loader",
+
 
 				SubContent = string.format("Loaded config %q", name),
 
+
 				Duration = 7
+
+
 			})
 
+
 		end})
+
+
+
+
 
 		section:AddButton({Title = "Save config", Callback = function()
 
+
 			local name = SaveManager.Options.SaveManager_ConfigList.Value
+
+
+
+
 
 			local success, err = self:Save(name)
 
+
 			if not success then
 
+
 				return self.Library:Notify({
+
+
 					Title = "Interface",
+
 
 					Content = "Config loader",
 
+
 					SubContent = "Failed to overwrite config: " .. err,
 
+
 					Duration = 7
+
+
 				})
+
 
 			end
 
+
+
+
+
 			self.Library:Notify({
+
+
 				Title = "Interface",
 
+
 				Content = "Config loader",
+
 
 				SubContent = string.format("Overwrote config %q", name),
 
+
 				Duration = 7
+
+
 			})
 
+
 		end})
+
+
+
+
 
 		section:AddButton({Title = "Refresh list", Callback = function()
 
+
 			SaveManager.Options.SaveManager_ConfigList:SetValues(self:RefreshConfigList())
+
 
 			SaveManager.Options.SaveManager_ConfigList:SetValue(nil)
 
+
 		end})
+
+
+
+
 
 		local AutoloadButton
 
+
 		AutoloadButton = section:AddButton({Title = "Set as autoload", Description = "Current autoload config: none", Callback = function()
+
 
 			local name = SaveManager.Options.SaveManager_ConfigList.Value
 
+
 			writefile(self.Folder .. "/autoload.txt", name)
+
 
 			AutoloadButton:SetDesc("Current autoload config: " .. name)
 
+
 			self.Library:Notify({
+
+
 				Title = "Interface",
+
 
 				Content = "Config loader",
 
+
 				SubContent = string.format("Set %q to auto load", name),
 
+
 				Duration = 7
+
+
 			})
+
 
 		end})
 
+
+
+
+
 		if isfile(self.Folder .. "/autoload.txt") then
+
 
 			local name = readfile(self.Folder .. "/autoload.txt")
 
+
 			AutoloadButton:SetDesc("Current autoload config: " .. name)
 
+
 		end
+
+
+
+
 
 		SaveManager:SetIgnoreIndexes({ "SaveManager_ConfigList", "SaveManager_ConfigName" })
 
+
 	end
+
+
+
+
 
 	if not RunService:IsStudio() then
 
+
 		SaveManager:BuildFolderTree()
+
 
 	end
 
+
 end
+
+
+
+
 
 local InterfaceManager = {} do
 
+
 	InterfaceManager.Folder = "FluentSettings"
 
+
 	InterfaceManager.Settings = {
+
+
 		Acrylic = true,
+
 
 		Transparency = true,
 
+
 		MenuKeybind = "M"
+
+
 	}
+
+
+
+
 
 	function InterfaceManager:SetTheme(name)
 
+
 		InterfaceManager.Settings.Theme = name
 
+
 	end
+
+
+
+
 
 	function InterfaceManager:SetFolder(folder)
 
+
 		self.Folder = folder;
+
 
 		self:BuildFolderTree()
 
+
 	end
+
+
+
+
 
 	function InterfaceManager:SetLibrary(library)
 
+
 		self.Library = library
 
+
 	end
+
+
+
+
 
 	function InterfaceManager:BuildFolderTree()
 
+
 		local paths = {}
+
+
+
+
 
 		local parts = self.Folder:split("/")
 
+
 		for idx = 1, #parts do
+
 
 			paths[#paths + 1] = table.concat(parts, "/", 1, idx)
 
+
 		end
+
+
+
+
 
 		table.insert(paths, self.Folder)
 
+
 		table.insert(paths, self.Folder .. "/")
+
+
+
+
 
 		for i = 1, #paths do
 
+
 			local str = paths[i]
+
 
 			if not isfolder(str) then
 
+
 				makefolder(str)
+
 
 			end
 
+
 		end
 
+
 	end
+
+
+
+
 
 	function InterfaceManager:SaveSettings()
 
+
 		writefile(self.Folder .. "/options.json", httpService:JSONEncode(InterfaceManager.Settings))
 
+
 	end
+
+
+
+
 
 	function InterfaceManager:LoadSettings()
 
+
 		local path = self.Folder .. "/options.json"
+
 
 		if isfile(path) then
 
+
 			local data = readfile(path)
+
+
+
+
 
 			if not RunService:IsStudio() then local success, decoded = pcall(httpService.JSONDecode, httpService, data) end
 
+
+
+
+
 			if success then
+
 
 				for i, v in next, decoded do
 
+
 					InterfaceManager.Settings[i] = v
+
 
 				end
 
+
 			end
+
 
 		end
 
+
 	end
+
 
 	function InterfaceManager:BuildInterfaceSection(tab)
 
+
 		assert(self.Library, "Must set InterfaceManager.Library")
+
 
 		local Library = self.Library
 
+
 		local Settings = InterfaceManager.Settings
+
+
+
+
 
 		InterfaceManager:LoadSettings()
 
+
+
+
+
 		local section = tab:AddSection("Interface", "monitor")
 
+
 		local InterfaceTheme = section:AddDropdown("InterfaceTheme", {
+
+
 			Title = "Theme",
+
 
 			Description = "Changes the interface theme.",
 
+
 			Values = Library.Themes,
+
 
 			Default = self.Library.Theme,
 
+
 			Callback = function(Value)
+
 
 				Library:SetTheme(Value)
 
+
 				Settings.Theme = Value
+
 
 				InterfaceManager:SaveSettings()
 
+
 			end
+
+
 		})
+
+
+
+
 
 		InterfaceTheme:SetValue(Settings.Theme)
 
+
+
+
+
 		if Library.UseAcrylic and not Mobile then
 
+
 			section:AddToggle("AcrylicToggle", {
+
+
 				Title = "Acrylic",
+
 
 				Description = "The blurred background requires graphic quality 8+",
 
+
 				Default = Settings.Acrylic,
+
 
 				Callback = function(Value)
 
+
 					Library:ToggleAcrylic(Value)
+
 
 					Settings.Acrylic = Value
 
+
 					InterfaceManager:SaveSettings()
 
+
 				end
+
+
 			})
+
 
 		elseif Mobile then
 
+
 			Settings.Acrylic = false
+
 
 		end
 
+
+
+
+
 		section:AddSlider("WindowTransparency", {
+
+
 			Title = "Window Transparency",
+
 
 			Description = "Adjusts the window transparency.",
 
+
 			Default = 1,
+
 
 			Min = 0,
 
+
 			Max = 3,
+
 
 			Rounding = 1,
 
+
 			Callback = function(Value)
+
 
 				Library:SetWindowTransparency(Value)
 
+
 			end
+
+
 		})
+
+
+
+
+
+
+
 
 		local MenuKeybind = section:AddKeybind("MenuKeybind", { Title = "Minimize Bind", Default = Library.MinimizeKey.Name or Settings.MenuKeybind })
 
+
 		MenuKeybind:OnChanged(function()
+
 
 			Settings.MenuKeybind = MenuKeybind.Value
 
+
 			InterfaceManager:SaveSettings()
+
 
 		end)
 
+
 		Library.MinimizeKeybind = MenuKeybind
 
+
 	end
+
 
 end
 
+
+
+
+
 Library.CreateWindow = function(self, Config)
+
 
 	assert(Config.Title, "Window - Missing Title")
 
+
+
+
+
 	if Library.Window then
+
 
 		print("You cannot create more than one window.")
 
+
 		return
+
 
 	end
 
+
+
+
+
 	Library.MinimizeKey = Config.MinimizeKey or Enum.KeyCode.LeftControl
+
 
 	Library.UseAcrylic = Config.Acrylic or false
 
+
 	Library.Acrylic = Config.Acrylic or false
+
 
 	Library.Theme = Config.Theme or "Dark"
 
@@ -12359,79 +12088,140 @@ Library.CreateWindow = function(self, Config)
 		Config.BackgroundTransparency = 0.5
 	end
 
+
+
+
+
 	if Config.Acrylic then
+
 
 		Acrylic.init()
 
+
 	end
+
+
+
+
 
 	local Icon = Config.Icon
 
+
 	if not fischbypass then 
+
 
 		if Library:GetIcon(Icon) then
 
+
 			Icon = Library:GetIcon(Icon)
 
+
 		end
+
+
+
+
 
 		if Icon == "" or Icon == nil then
 
+
 			Icon = nil
+
 
 		end
 
+
 	end
 
+
+
+
+
 	local Window = Components.Window({
+
+
 		Parent = GUI,
+
 
 		Size = Config.Size,
 
+
 		Title = Config.Title,
+
 
 		Icon = Icon,
 
+
 		Image = Config.Image,
+
 
 		BackgroundImage = Config.BackgroundImage,
 
+
 		BackgroundTransparency = Config.BackgroundTransparency,
+
 
 		BackgroundImageTransparency = Config.BackgroundImageTransparency,
 
+
 		SubTitle = Config.SubTitle,
 
+
 		Discord = Config.Discord,
+
 
 		TabWidth = Config.TabWidth,
 
 		DropdownsOutsideWindow = Config.DropdownsOutsideWindow,
 
+
 		Search = Config.Search,
+
 
 		UserInfoTitle = Config.UserInfoTitle,
 
+
 		UserInfo = Config.UserInfo,
+
 
 		UserInfoTop = Config.UserInfoTop,
 
+
 		UserInfoSubtitle = Config.UserInfoSubtitle,
 
+
 		UserInfoSubtitleColor = Config.UserInfoSubtitleColor,
+
+
 	})
+
+
+
+
 
 	Library.Window = Window
 
+
 	table.insert(Library.Windows, Window)
+
 
 	InterfaceManager:SetTheme(Config.Theme)
 
+
 	Library:SetTheme(Config.Theme)
+
+
+
+
 
 	return Window
 
+
 end
+
+
+
+
 
 function Library:CreateMinimizer(Config)
 	Config = Config or {}
@@ -12577,447 +12367,818 @@ function Library:CreateMinimizer(Config)
 	return holder
 end
 
+
+
+
+
 function Library:SetTheme(Value)
+
 
 	if Library.Window and table.find(Library.Themes, Value) then
 
+
 		Library.Theme = Value
+
 
 		Creator.UpdateTheme()
 
+
+
+
+
 		if Value == "Glass" then
+
 
 			Library:SetWindowTransparency(0.9)
 
+
 		end
+
 
 	end
 
+
 end
+
+
+
+
 
 function Library:Destroy()
 
+
 	if Library.Window then
+
 
 		Library.Unloaded = true
 
+
 		if Library.UseAcrylic then
+
 
 			Library.Window.AcrylicPaint.Model:Destroy()
 
+
 		end
+
 
 		Creator.Disconnect()
 
+
 		Library.GUI:Destroy()
+
 
 	end
 
+
 end
+
+
+
+
 
 function Library:ToggleAcrylic(Value)
 
+
 	if Library.Window then
+
 
 		if Library.UseAcrylic then
 
+
 			Library.Acrylic = Value
+
 
 			if Library.Window.AcrylicPaint and Library.Window.AcrylicPaint.Model then
 
+
 				Library.Window.AcrylicPaint.Model.Transparency = Value and 0.95 or 1
+
 
 			end
 
+
 		end
+
 
 	end
 
+
 end
+
+
+
+
 
 function Library:ToggleTransparency(Value)
 
+
 	if Library.Window then
+
 
 		Library.Window.AcrylicPaint.Frame.Background.BackgroundTransparency = Value and 0.35 or 0
 
+
 	end
 
+
 end
+
 
 function Library:SetWindowTransparency(Value)
 
+
 	if Library.Window and Library.UseAcrylic then
+
 
 		Value = math.clamp(Value, 0, 3)
 
+
+
+
+
 		if Library.Theme == "Glass" then
+
 
 			local glassTransparency = 0.8 + (Value * 0.05)
 
+
 			if Value > 1 then
+
 
 				glassTransparency = 0.85 + ((Value - 1) * 0.04)
 
+
 			end
 
+
 			if Value > 2 then
+
 
 				glassTransparency = 0.93 + ((Value - 2) * 0.04)
 
+
 			end
+
 
 			Library.Window.AcrylicPaint.Model.Transparency = math.min(glassTransparency, 0.99)
 
+
+
+
+
 			local backgroundTransparency = 0.7 + (Value * 0.08)
+
 
 			if Value > 1 then
 
+
 				backgroundTransparency = 0.78 + ((Value - 1) * 0.07)
 
+
 			end
+
 
 			if Value > 2 then
 
+
 				backgroundTransparency = 0.85 + ((Value - 2) * 0.1)
 
+
 			end
+
 
 			Library.Window.AcrylicPaint.Frame.Background.BackgroundTransparency = math.min(backgroundTransparency, 0.99)
 
+
+
+
+
 			Library.NotificationTransparency = Value
+
+
+
+
 
 			for _, notification in pairs(Library.ActiveNotifications or {}) do
 
+
 				if notification and notification.ApplyTransparency then
+
 
 					notification:ApplyTransparency()
 
+
 				end
 
+
 			end
+
 
 		else
 
+
 			Library.Window.AcrylicPaint.Model.Transparency = 0.98
+
 
 			Library.Window.AcrylicPaint.Frame.Background.BackgroundTransparency = Value * 0.3
 
+
 		end
+
 
 	end
 
+
 end
+
+
+
+
 
 function Library:Notify(Config)
 
+
 	return NotificationModule:New(Config)
 
+
 end
+
+
+
+
 
 if getgenv then
 
+
 	getgenv().Fluent = Library
+
 
 else
 
+
 	Fluent = Library
+
 
 end
 
+
+
+
+
 local MinimizeButton = New("TextButton", {
+
+
 	BackgroundColor3 = Color3.fromRGB(25, 25, 30),
+
 
 	Size = UDim2.new(1, 0, 1, 0),
 
+
 	BorderSizePixel = 0,
 
+
 	BackgroundTransparency = 0.05, 
+
+
 }, {
+
+
 	New("UICorner", {
+
+
 		CornerRadius = UDim.new(0, 14),
+
+
 	}),
+
 
 	New("UIGradient", {
+
+
 		Color = ColorSequence.new{
+
+
 			ColorSequenceKeypoint.new(0, Color3.fromRGB(40, 40, 50)),
 
+
 			ColorSequenceKeypoint.new(1, Color3.fromRGB(20, 20, 25))
+
+
 		},
 
+
 		Rotation = 45,
+
+
 	}),
 
+
 	New("UIStroke", {
+
+
 		ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
 
+
 		Color = Color3.fromRGB(100, 150, 255),
+
 
 		Transparency = 0.6,
 
+
 		Thickness = 2,
+
+
 	}),
 
+
 	New("Frame", {
+
+
 		BackgroundColor3 = Color3.fromRGB(100, 150, 255),
+
 
 		BackgroundTransparency = 0.9,
 
+
 		Size = UDim2.new(1, -6, 1, -6),
+
 
 		Position = UDim2.new(0, 3, 0, 3),
 
+
 		BorderSizePixel = 0,
+
+
 	}, {
+
+
 		New("UICorner", {
+
+
 			CornerRadius = UDim.new(0, 11),
+
+
 		}),
+
+
 	}),
 
+
 	New("Frame", {
+
+
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+
 
 		BackgroundTransparency = 0.94,
 
+
 		Size = UDim2.new(0.7, 0, 0.3, 0),
+
 
 		Position = UDim2.new(0.15, 0, 0.1, 0),
 
+
 		BorderSizePixel = 0,
+
+
 	}, {
+
+
 		New("UICorner", {
+
+
 			CornerRadius = UDim.new(0, 8),
+
+
 		}),
+
+
 	}),
 
+
 	New("ImageLabel", {
+
+
 		Image = "rbxassetid://10734897102",
+
 
 		Size = UDim2.new(0.8, 0, 0.8, 0),
 
+
 		Position = UDim2.new(0.5, 0, 0.5, 0),
+
 
 		AnchorPoint = Vector2.new(0.5, 0.5),
 
+
 		BackgroundTransparency = 1,
+
 
 		ImageColor3 = Color3.fromRGB(255, 255, 255),
 
+
 		ImageTransparency = 0.1,
+
+
 	}, {
+
+
 		New("UIAspectRatioConstraint", {
+
+
 			AspectRatio = 1,
 
+
 			AspectType = Enum.AspectType.FitWithinMaxSize,
+
+
 		})
+
+
 	})
+
+
 })
 
+
+
+
+
 local MobileMinimizeButton = New("TextButton", {
+
+
 	BackgroundColor3 = Color3.fromRGB(25, 25, 30),
+
 
 	Size = UDim2.new(1, 0, 1, 0),
 
+
 	BorderSizePixel = 0,
 
+
 	BackgroundTransparency = 0.05,
+
+
 }, {
+
+
 	New("UICorner", {
+
+
 		CornerRadius = UDim.new(0, 12),
+
+
 	}),
+
 
 	New("UIGradient", {
+
+
 		Color = ColorSequence.new{
+
+
 			ColorSequenceKeypoint.new(0, Color3.fromRGB(40, 40, 50)),
 
+
 			ColorSequenceKeypoint.new(1, Color3.fromRGB(20, 20, 25))
+
+
 		},
 
+
 		Rotation = 45,
+
+
 	}),
 
+
 	New("UIStroke", {
+
+
 		ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+
 
 		Color = Color3.fromRGB(100, 150, 255),
 
+
 		Transparency = 0.7,
 
+
 		Thickness = 1.5,
+
+
 	}),
 
+
 	New("Frame", {
+
+
 		BackgroundColor3 = Color3.fromRGB(100, 150, 255),
+
 
 		BackgroundTransparency = 0.92,
 
+
 		Size = UDim2.new(1, -4, 1, -4),
+
 
 		Position = UDim2.new(0, 2, 0, 2),
 
+
 		BorderSizePixel = 0,
+
+
 	}, {
+
+
 		New("UICorner", {
+
+
 			CornerRadius = UDim.new(0, 10),
+
+
 		}),
+
+
 	}),
 
+
 	New("ImageLabel", {
+
+
 		Image = "rbxassetid://10734897102",
+
 
 		Size = UDim2.new(0.8, 0, 0.8, 0),
 
+
 		Position = UDim2.new(0.5, 0, 0.5, 0),
+
 
 		AnchorPoint = Vector2.new(0.5, 0.5),
 
+
 		BackgroundTransparency = 1,
+
 
 		ImageColor3 = Color3.fromRGB(255, 255, 255),
 
+
 		ImageTransparency = 0.1,
+
+
 	}, {
+
+
 		New("UIAspectRatioConstraint", {
+
+
 			AspectRatio = 1,
 
+
 			AspectType = Enum.AspectType.FitWithinMaxSize,
+
+
 		})
+
+
 	})
+
+
 })
+
+
+
+
 
 local Minimizer
 
+
+
+
+
 local isDragging = false
+
 
 local dragStart = nil
 
+
 local dragOffset = nil
+
+
+
+
 
 Creator.AddSignal(MinimizeButton.InputBegan, function(Input)
 
+
 	if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+
 
 		isDragging = true
 
+
 		dragStart = Vector2.new(Input.Position.X, Input.Position.Y)
+
 
 		dragOffset = (Library.Minimizer or Minimizer).Position
 
+
+
+
+
 		local connection
+
 
 		connection = Input.Changed:Connect(function()
 
+
 			if Input.UserInputState == Enum.UserInputState.End then
+
 
 				isDragging = false
 
+
 				dragStart = nil
+
 
 				dragOffset = nil
 
+
 				connection:Disconnect()
+
 
 			end
 
+
 		end)
+
 
 	end
 
+
 end)
+
+
+
+
 
 Creator.AddSignal(MobileMinimizeButton.InputBegan, function(Input)
 
+
 	if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+
 
 		isDragging = true
 
+
 		dragStart = Vector2.new(Input.Position.X, Input.Position.Y)
+
 
 		dragOffset = (Library.Minimizer or Minimizer).Position
 
+
 		local connection
+
 
 		connection = Input.Changed:Connect(function()
 
+
 			if Input.UserInputState == Enum.UserInputState.End then
+
 
 				isDragging = false
 
+
 				dragStart = nil
+
 
 				dragOffset = nil
 
+
 				connection:Disconnect()
+
 
 			end
 
+
 		end)
+
 
 	end
 
+
 end)
+
+
+
+
+
+
 
 Creator.AddSignal(RunService.Heartbeat, function()
 
+
 	local activeMin = Library.Minimizer or Minimizer
+
 
 	if isDragging and dragStart and dragOffset and activeMin and activeMin.Parent then
 
+
 		local currentMousePos = Vector2.new(Mouse.X, Mouse.Y)
+
 
 		local delta = currentMousePos - dragStart
 
+
 		local newX = dragOffset.X.Offset + delta.X
+
 
 		local newY = dragOffset.Y.Offset + delta.Y
 
+
 		local viewportSize = workspace.Camera.ViewportSize
+
 
 		local minimizerSize = activeMin.AbsoluteSize
 
+
+
+
+
 		if newX < 0 then newX = 0 end
+
 
 		if newY < 0 then newY = 0 end
 
+
 		if newX > viewportSize.X - minimizerSize.X then 
+
 
 			newX = viewportSize.X - minimizerSize.X 
 
+
 		end
+
 
 		if newY > viewportSize.Y - minimizerSize.Y then 
 
+
 			newY = viewportSize.Y - minimizerSize.Y 
+
 
 		end
 
+
 		activeMin.Position = UDim2.new(0, newX, 0, newY)
+
 
 	end
 
+
 end)
+
+
+
+
 
 Creator.AddSignal(MinimizeButton.MouseButton1Click, function()
 
+
 	task.wait(0.1)
+
 
 	if not isDragging then
 
+
 		Library.Window:Minimize()
 
+
 	end
+
 
 end)
 
+
+
+
+
 Creator.AddSignal(MobileMinimizeButton.MouseButton1Click, function()
+
 
 	task.wait(0.1)
 
+
 	if not isDragging then
+
 
 		Library.Window:Minimize()
 
+
 	end
+
 
 end)
 
