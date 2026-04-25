@@ -1,4 +1,3 @@
--- automatically parsed from lucide.dev, added 89 icons. https://discord.gg/Puhp2hjCSs && 
 local Icons = {
 	["lucide-accessibility"] = "rbxassetid://10709751939",
 	["lucide-activity"] = "rbxassetid://10709752035",
