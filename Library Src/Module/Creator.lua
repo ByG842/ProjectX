@@ -1302,6 +1302,7 @@ end
 local viewportPointToWorld, getOffset = unpack({ viewportPointToWorld, getOffset })
 
 Creator.Flipper = Flipper
+Creator.LibraryLogo = "rbxassetid://132591097605660"
 Library.Creator = Creator
 
 return Creator, Library
