@@ -1,3 +1,9 @@
+--[[
+	Main.lua (entry point)
+	โหลดไฟล์ทั้งหมดตามลำดับ: Icons -> Themes -> Creator -> Components -> Elements -> Managers
+	แล้วประกอบเป็น Library ตัวเดียว
+]]
+
 local Lighting = game:GetService("Lighting")
 local RunService = game:GetService("RunService")
 local LocalPlayer = game:GetService("Players").LocalPlayer
@@ -50,6 +56,11 @@ local Elements, ElementsTable = fetch("Elements")(Components, Library)
 local SaveManager, InterfaceManager = fetch("Managers")(Library, Mobile)
 
 local New = Creator.New
+local GUI = Creator.GUI
+local AddSignal = Creator.AddSignal
+local GetStyleProperty = Creator.GetStyleProperty
+local ApplyStyle = Creator.ApplyStyle
+local NewCorner = Creator.NewCorner
 
 function Library:GetIcon(Name)
 	if Name ~= nil and Icons["lucide-" .. Name] then
@@ -591,7 +602,7 @@ local MobileMinimizeButton = New("TextButton", {
 	}),
 
 	New("ImageLabel", {
-		Image = "rbxassetid://10734897102",
+		Image = Creator.LibraryLogo,
 
 		Size = UDim2.new(0.8, 0, 0.8, 0),
 
