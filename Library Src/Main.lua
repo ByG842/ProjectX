@@ -57,6 +57,7 @@ local SaveManager, InterfaceManager = fetch("Managers")(Library, Mobile)
 
 local New = Creator.New
 local GUI = Creator.GUI
+local Acrylic = Components.Acrylic
 local AddSignal = Creator.AddSignal
 local GetStyleProperty = Creator.GetStyleProperty
 local ApplyStyle = Creator.ApplyStyle
