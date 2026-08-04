@@ -2478,6 +2478,11 @@ Components.Window = (function()
 	local New = Creator.New
 
 	return function(Config)
+		-- ✅ Icon = true ให้ใช้โลโก้เริ่มต้นของไลบรารี่แทนการใส่ rbxassetid เอง
+		if Config.Icon == true then
+			Config.Icon = Creator.LibraryLogo
+		end
+
 		local Window = {
 			Minimized = false,
 			Maximized = false,
