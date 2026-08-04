@@ -1,9 +1,3 @@
---[[
-	Main.lua (entry point)
-	โหลดไฟล์ทั้งหมดตามลำดับ: Icons -> Themes -> Creator -> Components -> Elements -> Managers
-	แล้วประกอบเป็น Library ตัวเดียว
-]]
-
 local Lighting = game:GetService("Lighting")
 local RunService = game:GetService("RunService")
 local LocalPlayer = game:GetService("Players").LocalPlayer
