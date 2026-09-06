@@ -614,7 +614,7 @@ local Library = {
 	MinimizeKey = Enum.KeyCode.RightControl,
 
 	-- 🖼️ โลโก้แบรนด์ default — ใช้ตรงไหนก็ได้ที่รับ Icon โดยใส่ Icon = true แทนพิมพ์ rbxassetid เต็มๆ
-	BrandLogo = "rbxassetid://132591097605660",
+	BrandLogo = "rbxassetid://139033519234445",
 }
 
 local function isMotor(value)
@@ -3101,7 +3101,7 @@ Components.Dialog = (function()
 		local RootMotor, RootTransparency =
 			Creator.SpringMotor(1, NewDialog.Root, "GroupTransparency", false, false, { frequency = 5 })
 		function NewDialog:Open()
-			Library.DialogOpen = true
+			Library.Diapen = true
 			NewDialog.Scale.Scale = 1.04
 			TintTransparency(0.85)
 			RootTransparency(0)
@@ -3112,7 +3112,7 @@ Components.Dialog = (function()
 			end
 		end
 		function NewDialog:Close()
-			Library.DialogOpen = false
+			Library.Diapen = false
 			TintTransparency(1)
 			RootTransparency(1)
 			Scale(1.02)
@@ -3774,9 +3774,9 @@ Components.TitleBar = (function()
 					PaddingLeft = UDim.new(0, 14),
 				}),
 
-				-- Logo image (ไม่มีเส้นขอบ, ขอบโค้งนิดเดียว)
+				--  image (ไม่มีเส้นขอบ, ขอบโค้งนิดเดียว)
 				Config.Icon and New("Frame", {
-					Name = "LogoFrame",
+					Name = "Frame",
 					Size = UDim2.fromOffset(30, 30),
 					BackgroundTransparency = 1, -- 👻 ปรับเป็น 1 ให้พื้นหลังใสสนิท จะได้ไม่มีสี่เหลี่ยมทึบๆ มากวนใจ
 					LayoutOrder = 1,
@@ -3789,7 +3789,7 @@ Components.TitleBar = (function()
 					-- ❌ ลบคำสั่ง New("UIStroke") ทิ้งไปเลย เพื่อลบเส้นขอบออก 100%
 
 					New("ImageLabel", {
-						Image = (Config.Icon == true) and Library.BrandLogo or Config.Icon,
+						Image = (Config.Icon == true) and Library.Brand or Config.Icon,
 						Size = UDim2.fromOffset(35, 35), -- 🖼️ ขยายโลโก้ให้ใหญ่ขึ้นอีกนิด (เป็น 26) เพราะไม่มีกรอบแล้ว
 						Position = UDim2.fromScale(0.5, 0.5),
 						AnchorPoint = Vector2.new(0.5, 0.5),
@@ -10648,7 +10648,7 @@ local Icons = {
 
 function Library:GetIcon(Name)
 	if Name == true then
-		return Library.BrandLogo
+		return Library.Brand
 	end
 	if type(Name) == "string" and Icons["lucide-" .. Name] then
 		return Icons["lucide-" .. Name]
