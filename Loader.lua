@@ -13,7 +13,7 @@
     ---------------------------------------------------------------
 ]]
 
-local BASE_URL = "https://github.com/ByG842/ProjectX/tree/main/src"
+local BASE_URL = "https://raw.githubusercontent.com/ByG842/ProjectX/src/"
 -- ตัวอย่าง: "https://raw.githubusercontent.com/johndoe/my-ui-lib/main/src/"
 
 -- ลำดับไฟล์ "ต้องตรงเป๊ะ" ตามลำดับเดิมในไฟล์ต้นฉบับ ห้ามสลับ
